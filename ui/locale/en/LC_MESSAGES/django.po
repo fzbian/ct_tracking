@@ -1,0 +1,17 @@
+msgid "Change Status for All Packages - ChinaTown Tracking"
+msgstr "Change Status for All Packages - ChinaTown Tracking"
+
+msgid "Back to Container List"
+msgstr "Back to Container List"
+
+msgid "Change Status for All Packages in Container ID: %(container_id)s"
+msgstr "Change Status for All Packages in Container ID: %(container_id)s"
+
+msgid "New Status:"
+msgstr "New Status:"
+
+msgid "Mark all packages as delivered"
+msgstr "Mark all packages as delivered"
+
+msgid "Update Status"
+msgstr "Update Status"

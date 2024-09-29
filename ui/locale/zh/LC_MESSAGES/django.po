@@ -1,0 +1,262 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: zh_Hans\n"
+
+msgid "Change Status for All Packages - ChinaTown Tracking"
+msgstr "更改所有包裹的状态 - ChinaTown 追踪"
+
+msgid "Back to Container List"
+msgstr "返回容器列表"
+
+msgid "Change Status for All Packages in Container ID: %(container_id)s"
+msgstr "更改容器 ID %(container_id)s 中所有包的状态"
+
+msgid "New Status:"
+msgstr "新状态："
+
+msgid "Mark all packages as delivered"
+msgstr "将所有包裹标记为已交付"
+
+msgid "Update Status"
+msgstr "更新状态"
+
+msgid "Packages for container:"
+msgstr "容器的包裹："
+
+msgid "Shipment Type"
+msgstr "发货类型："
+
+msgid "Created at:"
+msgstr "创建于："
+
+msgid "Updated at:"
+msgstr "更新于："
+
+msgid "Total Weight"
+msgstr "总重量："
+
+msgid "Total CMB"
+msgstr "总体积："
+
+msgid "Add Package"
+msgstr "添加包裹"
+
+msgid "Tracking ID"
+msgstr "追踪编号"
+
+msgid "Pseudoname"
+msgstr "假名"
+
+msgid "Weight"
+msgstr "重量"
+
+msgid "CMB"
+msgstr "体积"
+
+msgid "kg"
+msgstr "公斤"
+
+msgid "m³"
+msgstr "立方米"
+
+msgid "Contact Number"
+msgstr "联系电话"
+
+msgid "Package type"
+msgstr "包裹类型"
+
+msgid "Delivered"
+msgstr "已交付"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "Are you sure you want to delete this package?"
+msgstr "您确定要删除这个包裹吗？"
+
+msgid "No packages found."
+msgstr "未找到包裹。"
+
+msgid "Box"
+msgstr "盒子"
+
+msgid "Yute"
+msgstr "黄麻"
+
+msgid "Maritime"
+msgstr "海运"
+
+msgid "Plane"
+msgstr "航空"
+
+msgid "Create a New Container"
+msgstr "创建新容器"
+
+msgid "Identifier Name"
+msgstr "标识符名称："
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Active Containers"
+msgstr "活动容器"
+
+msgid "New Container"
+msgstr "新容器"
+
+msgid "No active containers found."
+msgstr "未找到活动容器。"
+
+msgid "Archived Containers"
+msgstr "已归档容器"
+
+msgid "No archived containers found."
+msgstr "未找到已归档容器。"
+
+msgid "Are you sure you want to delete this container?"
+msgstr "您确定要删除这个容器吗？"
+
+msgid "Are you sure you want to archive this container?"
+msgstr "您确定要归档这个容器吗？"
+
+msgid "Are you sure you want to unarchive this container?"
+msgstr "您确定要取消归档这个容器吗？"
+
+msgid "N/A"
+msgstr "不适用"
+
+msgid "Add Status - ChinaTown Tracking"
+msgstr "添加状态 - ChinaTown 追踪"
+
+msgid "Back to Package Statuses"
+msgstr "返回包裹状态"
+
+msgid "Add Status for Package ID: %(package_id)s"
+msgstr "为包裹 ID 添加状态：%(package_id)s"
+
+msgid "Status:"
+msgstr "状态："
+
+msgid "Mark as Delivered"
+msgstr "标记为已交付"
+
+msgid "Add Status"
+msgstr "添加状态"
+
+msgid "Create Package - ChinaTown Tracking"
+msgstr "创建包裹 - ChinaTown 追踪"
+
+msgid "Create Package"
+msgstr "创建包裹"
+
+msgid "Back to container"
+msgstr "返回容器"
+
+msgid "Container"
+msgstr "容器"
+
+msgid "Select an option"
+msgstr "选择一个选项"
+
+msgid "Edit package"
+msgstr "编辑包"
+
+msgid "Edit package - ChinaTown Tracking"
+msgstr "编辑包 - ChinaTown 追踪"
+
+msgid "Update Package"
+msgstr "更新程序包"
+
+msgid "Select container"
+msgstr "选择容器"
+
+msgid "Container Detail - ChinaTown Tracking"
+msgstr "容器详细信息 - ChinaTown 追踪"
+
+msgid "ChinaTown Tracking"
+msgstr "唐人街跟踪"
+
+msgid "Change Language"
+msgstr "更改语言"
+
+msgid "English"
+msgstr "English"
+
+msgid "Spanish"
+msgstr "Español"
+
+msgid "Chinese"
+msgstr "中文"
+
+msgid "Logout"
+msgstr "登出"
+
+msgid "Package Statuses"
+msgstr "包裹状态"
+
+msgid "Statuses for Package ID:"
+msgstr "包裹 ID 的状态："
+
+msgid "Add New Status"
+msgstr "添加新状态"
+
+msgid "Status"
+msgstr "状态"
+
+msgid "Updated At"
+msgstr "更新于"
+
+msgid "No statuses found."
+msgstr "未找到状态"
+
+msgid "No statuses available."
+msgstr "没有可用的状态"
+
+msgid "Page Not Found - 404"
+msgstr "页面未找到 - 404"
+
+msgid "404 - Page Not Found"
+msgstr "404 - 页面未找到"
+
+msgid "The page you are looking for does not exist."
+msgstr "您正在寻找的页面不存在。"
+
+msgid "Go to Homepage"
+msgstr "返回主页"
+
+msgid "Login - ChinaTown Tracking"
+msgstr "登录 - ChinaTown 跟踪"
+
+msgid "Login"
+msgstr "登录"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Invalid username or password"
+msgstr "无效的用户名或密码"
+
+msgid "Search Package"
+msgstr "搜索包裹"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Error"
+msgstr "错误"
+
+msgid "The tracking ID is not valid or not exist"
+msgstr "追踪编号无效或不存在"
+
+
+

@@ -1,0 +1,50 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Add Status - ChinaTown Tracking" %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-light">
+    {% include 'partials/headers/header.html' %}
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        {% trans "Back to Package Statuses" as back_text %}
+        {% include 'partials/buttons/back_button_package_id.html' with url="view_statuses" package_id=package_id text=back_text %}
+
+        <h1 class="text-center text-dark fw-bold mt-4">
+            {% blocktrans %}Add Status for Package ID: {{ package_id }}{% endblocktrans %}
+        </h1>
+        <!-- Error Message -->
+        {% if error %}
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- Form -->
+        <form method="post" action="{% url 'add_status' package_id=package_id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="status" class="form-label">{% trans "Status:" %}</label>
+                <input type="text" id="status" name="status" required class="form-control">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" id="delivered" name="delivered" class="form-check-input">
+                <label for="delivered" class="form-check-label">{% trans "Mark as Delivered" %}</label>
+            </div>
+            <button type="submit" class="btn btn-dark">{% trans "Add Status" %}</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

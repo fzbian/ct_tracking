@@ -1,0 +1,129 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "ChinaTown Tracking - Containers" %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+
+<body>
+    {% include 'partials/headers/header.html' %}
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>{% trans "Active Containers" %}</h1>
+            <div>
+                <a href="{% url 'container_create' %}" class="btn btn-outline-dark">
+                    <i class="bi bi-plus-circle-fill"></i> {% trans "New Container" %}
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>{% trans "Identifier Name" %}</th>
+                        <th>{% trans "Shipment Type" %}</th>
+                        <th>{% trans "Total Weight" %}</th>
+                        <th>{% trans "Total CMB" %}</th>
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for container in active_containers %}
+                        <tr>
+                            <td>{{ container.identifier_name }}</td>
+                            <td>{% if container.shipment_type == "Maritime" %}{% trans "Maritime" %}{% elif container.shipment_type == "Plane" %}{% trans "Plane" %}{% else %}{% trans "N/A" %}{% endif %}</td>
+                            <td>{% if container.total_weight %}{{ container.total_weight }}{% else %}{% trans "N/A" %}{% endif %}</td>
+                            <td>{% if container.total_volumetric_measure %}{{ container.total_volumetric_measure }}{% else %}{% trans "N/A" %}{% endif %}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'container_detail' container.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                    <form action="{% url 'delete_container' container.id %}" method="post" class="d-inline me-2 rounded">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded" onclick="return confirm('{% trans "Are you sure you want to delete this container?" %}');">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{% url 'change_status_by_container' container.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                    </a>
+                                    <form action="{% url 'archive_container' container.id %}" method="post" class="d-inline me-2 rounded">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-warning rounded" onclick="return confirm('{% trans "Are you sure you want to archive this container?" %}');">
+                                            <i class="bi bi-archive-fill"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">{% trans "No active containers found." %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h1 class="mb-4">{% trans "Archived Containers" %}</h1>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>{% trans "Identifier Name" %}</th>
+                        <th>{% trans "Shipment Type" %}</th>
+                        <th>{% trans "Total Weight" %}</th>
+                        <th>{% trans "Total CBM" %}</th>
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for container in archived_containers %}
+                        <tr>
+                            <td>{{ container.identifier_name }}</td>
+                            <td>{% if container.shipment_type == "Maritime" %}{% trans "Maritime" %}{% elif container.shipment_type == "Plane" %}{% trans "Plane" %}{% else %}{% trans "N/A" %}{% endif %}</td>
+                            <td>{% if container.total_weight %}{{ container.total_weight }}{% else %}{% trans "N/A" %}{% endif %}</td>
+                            <td>{% if container.total_volumetric_measure %}{{ container.total_volumetric_measure }}{% else %}{% trans "N/A" %}{% endif %}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'container_detail' container.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </a>
+                                    <form action="{% url 'delete_container' container.id %}" method="post" class="d-inline me-2 rounded">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded" onclick="return confirm('{% trans "Are you sure you want to delete this container?" %}');">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+                                    </form>
+                                    <form action="{% url 'archive_container' container.id %}" method="post" class="d-inline me-2 rounded">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-warning rounded" onclick="return confirm('{% trans "Are you sure you want to unarchive this container?" %}');">
+                                            <i class="bi bi-arrow-left-circle-fill"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">{% trans "No archived containers found." %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: es\n"
+
+msgid "Change Status for All Packages - ChinaTown Tracking"
+msgstr "Cambiar estado de todos los paquetes - ChinaTown Tracking"
+
+msgid "Back to Container List"
+msgstr "Volver a la lista de contenedores"
+
+msgid "Change Status for All Packages in Container ID: %(container_id)s"
+msgstr "Cambiar estado de todos los paquetes en contenedor ID: %(container_id)s"
+
+msgid "New Status:"
+msgstr "Nuevo estado:"
+
+msgid "Mark all packages as delivered"
+msgstr "Marcar todos los paquetes como entregados"
+
+msgid "Update Status"
+msgstr "Actualizar estado"
+
+msgid "Packages for container:"
+msgstr "Paquetes del contenedor:"
+
+msgid "Shipment Type"
+msgstr "Tipo de envío"
+
+msgid "Created at:"
+msgstr "Creado el:"
+
+msgid "Updated at:"
+msgstr "Actualizado el:"
+
+msgid "Total Weight"
+msgstr "Peso total"
+
+msgid "Total CMB"
+msgstr "Volumen total"
+
+msgid "Add Package"
+msgstr "Agregar paquete"
+
+msgid "Tracking ID"
+msgstr "ID de seguimiento"
+
+msgid "Pseudoname"
+msgstr "Pseudoname"
+
+msgid "Weight"
+msgstr "Peso"
+
+msgid "CMB"
+msgstr "Volumen"
+
+msgid "kg"
+msgstr "kg"
+
+msgid "m³"
+msgstr "m³"
+
+msgid "Contact Number"
+msgstr "Número de contacto"
+
+msgid "Package type"
+msgstr "Tipo de paquete"
+
+msgid "Delivered"
+msgstr "Entregado"
+
+msgid "Actions"
+msgstr "Acciones"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "No"
+
+msgid "Are you sure you want to delete this package?"
+msgstr "¿Estás seguro de que deseas eliminar este paquete?"
+
+msgid "No packages found."
+msgstr "No se encontraron paquetes."
+
+msgid "Box"
+msgstr "Caja"
+
+msgid "Yute"
+msgstr "Yute"
+
+msgid "Maritime"
+msgstr "Marítimo"
+
+msgid "Plane"
+msgstr "Aéreo"
+
+msgid "Create a New Container"
+msgstr "Crear un nuevo contenedor"
+
+msgid "Identifier Name"
+msgstr "Nombre identificador"
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "Active Containers"
+msgstr "Contenedores activos"
+
+msgid "New Container"
+msgstr "Nuevo contenedor"
+
+msgid "No active containers found."
+msgstr "No se encontraron contenedores activos."
+
+msgid "Archived Containers"
+msgstr "Contenedores archivados"
+
+msgid "No archived containers found."
+msgstr "No se encontraron contenedores archivados."
+
+msgid "Are you sure you want to delete this container?"
+msgstr "¿Estás seguro de que deseas eliminar este contenedor?"
+
+msgid "Are you sure you want to archive this container?"
+msgstr "¿Estás seguro de que deseas archivar este contenedor?"
+
+msgid "Are you sure you want to unarchive this container?"
+msgstr "¿Estás seguro de que deseas desarchivar este contenedor?"
+
+msgid "N/A"
+msgstr "N/A"
+
+msgid "Add Status - ChinaTown Tracking"
+msgstr "Agregar estado - ChinaTown Tracking"
+
+msgid "Back to Package Statuses"
+msgstr "Volver a estados de paquetes"
+
+msgid "Add Status for Package ID: %(package_id)s"
+msgstr "Agregar estado al paquete ID: %(package_id)s"
+
+msgid "Status:"
+msgstr "Estado:"
+
+msgid "Mark as Delivered"
+msgstr "Marcar como entregado"
+
+msgid "Add Status"
+msgstr "Agregar estado"
+
+msgid "Create Package - ChinaTown Tracking"
+msgstr "Crear paquete - ChinaTown Tracking"
+
+msgid "Create Package"
+msgstr "Crear paquete"
+
+msgid "Back to container"
+msgstr "Volver al contenedor"
+
+msgid "Container"
+msgstr "Contenedor"
+
+msgid "Select an option"
+msgstr "Seleccionar una opción"
+
+msgid "Edit package"
+msgstr "Editar paquete"
+
+msgid "Edit package - ChinaTown Tracking"
+msgstr "Editar paquete - ChinaTown Tracking"
+
+msgid "Update Package"
+msgstr "Actualizar paquete"
+
+msgid "Select container"
+msgstr "Seleccionar contenedor"
+
+msgid "Container Detail - ChinaTown Tracking"
+msgstr "Detalle del contenedor - ChinaTown Tracking"
+
+msgid "ChinaTown Tracking"
+msgstr "ChinaTown Tracking"
+
+msgid "Change Language"
+msgstr "Cambiar idioma"
+
+msgid "English"
+msgstr "Inglés"
+
+msgid "Spanish"
+msgstr "Español"
+
+msgid "Chinese"
+msgstr "Chino"
+
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+msgid "Package Statuses"
+msgstr "Estados de paquetes"
+
+msgid "Statuses for Package ID:"
+msgstr "Estados del paquete ID:"
+
+msgid "Add New Status"
+msgstr "Agregar nuevo estado"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "Updated At"
+msgstr "Actualizado el"
+
+msgid "No statuses found."
+msgstr "No se encontraron estados."
+
+msgid "No statuses available."
+msgstr "No hay estados disponibles."
+
+msgid "Page Not Found - 404"
+msgstr "Página No Encontrada - 404"
+
+msgid "404 - Page Not Found"
+msgstr "404 - Página No Encontrada"
+
+msgid "The page you are looking for does not exist."
+msgstr "La página que estás buscando no existe."
+
+msgid "Go to Homepage"
+msgstr "Ir a la Página Principal"
+
+msgid "Login - ChinaTown Tracking"
+msgstr "Login - ChinaTown Tracking"
+
+msgid "Login"
+msgstr "Iniciar sesión"
+
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Password"
+msgstr "Contraseña"
+
+msgid "Invalid username or password"
+msgstr "Nombre de usuario o contraseña inválidos"
+
+msgid "Search Package"
+msgstr "Buscar paquete"
+
+msgid "The tracking ID is not valid or not exist"
+msgstr "El ID de seguimiento no es válido o no existe"
+
+

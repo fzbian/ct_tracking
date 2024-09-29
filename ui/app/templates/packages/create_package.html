@@ -1,0 +1,80 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Create Package - ChinaTown Tracking" %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    {% include 'partials/headers/header.html' %}
+
+    <div class="container mt-4">
+        {% trans "Back to container" as back_text %}
+        {% include 'partials/buttons/back_button_container_id.html' with url="container_detail" container_id=container_id text=back_text %}
+        <!-- Título principal -->
+        <h1 class="text-center text-danger fw-bold my-4">{% trans "Create Package" %}</h1>
+
+        <!-- Display error message if there is one -->
+        {% if error %}
+            <p class="text-danger">{{ error }}</p>
+        {% endif %}
+
+        <!-- Form to create a new package -->
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="pseudoname" class="form-label">{% trans "Pseudoname" %}</label>
+                <input type="text" id="pseudoname" name="pseudoname" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="weight" class="form-label">{% trans "Weight" %}</label>
+                <input type="number" id="weight" name="weight" class="form-control" step="0.01" min="0" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="volumetric_measure" class="form-label">{% trans "CMB" %}</label>
+                <input type="number" id="volumetric_measure" name="volumetric_measure" class="form-control" step="0.01" min="0" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="contact_number" class="form-label">{% trans "Contact Number" %}</label>
+                <input type="text" id="contact_number" name="contact_number" class="form-control" maxlength="10" pattern="\d{10}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="package_type" class="form-label">{% trans "Package type" %}</label>
+                <select id="package_type" name="package_type" class="form-select" required>
+                    <option value="">{% trans "Select an option" %}</option>
+                    <option value="Yute">{% trans "Yute" %}</option>
+                    <option value="Caja">{% trans "Box" %}</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="container_id" class="form-label">{% trans "Container" %}</label>
+                <select id="container_id" name="container_id" class="form-select" required>
+                    <option value="">{% trans "Select Container" %}</option>
+                    {% for container in containers %}
+                        <option value="{{ container.id }}" {% if container.id == container_id %}selected{% endif %}>
+                            {{ container.identifier_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Botón con espaciado inferior -->
+            <button type="submit" class="btn btn-danger mb-4">{% trans "Create Package" %}</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (Opcional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,156 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paquete {{ package.tracking_id }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            list-style: none;
+        }
+
+        /* Línea de la timeline */
+        .timeline:before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 18px;
+            bottom: 0;
+            width: 4px;
+            background-color: #dc3545;
+        }
+
+        /* Último estado completado - cuando está delivered */
+        .timeline.delivered:before {
+            bottom: auto;
+            height: calc(100% - 40px); /* Reduce la línea roja para que termine en la bolita verde */
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #dc3545;
+        }
+
+        .timeline-item.completed:before {
+            background-color: #28a745;
+        }
+
+        .status-time {
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'partials/headers/header_logout.html' %}
+
+    <div class="container mt-4 mb-4">
+        <h1 class="text-center text-danger fw-bold my-4">Detalles del Paquete</h1>
+
+        <div class="card">
+            <div class="card-header">
+                Información del Paquete
+            </div>
+            <div class="card-body">
+                <p><strong>Tracking ID:</strong> {{ package.tracking_id }}</p>
+                <p><strong>Pseudoname:</strong> {{ package.pseudoname }}</p>
+                <p><strong>Peso:</strong> {{ package.weight }} kg</p>
+                <p><strong>Medida Volumétrica:</strong> {{ package.volumetric_measure }} m³</p>
+                <p><strong>Tipo de paquete:</strong> {{ package.package_type }}</p>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                Estado del Paquete
+            </div>
+            <div class="card-body">
+                <ul class="timeline {% if package.delivered %}delivered{% endif %}">
+                    {% if package.delivered %}
+                        <!-- Mostrar todos los estados y marcar el último como "completado" -->
+                        {% for status in statuses %}
+                        <li class="timeline-item {% if forloop.last %}completed{% endif %}">
+                            <strong>{{ status.status }}</strong>
+                            <p class="status-time" data-datetime="{{ status.updated_at }}">{{ status.updated_at }}</p>
+                        </li>
+                        {% empty %}
+                        <li class="timeline-item">
+                            <p>No hay estados disponibles para este paquete.</p>
+                        </li>
+                        {% endfor %}
+                    {% else %}
+                        {% for status in statuses %}
+                        <li class="timeline-item">
+                            <strong>{{ status.status }}</strong>
+                            <p class="status-time" data-datetime="{{ status.updated_at }}">{{ status.updated_at }}</p>
+                        </li>
+                        {% empty %}
+                        <li class="timeline-item">
+                            <p>No hay estados disponibles para este paquete.</p>
+                        </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                Información del Contenedor
+            </div>
+            <div class="card-body">
+                {% if container %}
+                    <p><strong>Tipo de Envío:</strong> {{ container.shipment_type }}</p>
+                {% else %}
+                    <p>No hay información del contenedor disponible.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            let hours = date.getHours();
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // El valor de las 12 horas
+            return `${day}/${month}/${year} ${hours}:${minutes} ${ampm}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const dateTimeElements = document.querySelectorAll('.status-time');
+            dateTimeElements.forEach(function (element) {
+                const originalDate = element.getAttribute('data-datetime');
+                element.textContent = formatDateTime(originalDate);
+            });
+        });
+    </script>
+</body>
+
+</html>

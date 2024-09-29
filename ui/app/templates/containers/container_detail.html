@@ -1,0 +1,156 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Container Detail - ChinaTown Tracking" %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-light">
+    {% include 'partials/headers/header.html' %}
+
+    <div class="container mt-4">
+        {% trans "Back to Container List" as back_text %}
+        {% include 'partials/buttons/back_button.html' with url="container_list" text=back_text %}
+        <h1 class="text-center text-dark fw-bold">
+            {% trans "Packages for container:" %} "{{ container.identifier_name }}"
+        </h1>
+
+        <div class="mb-3">
+            <p><strong>{% trans "Shipment Type" %}</strong>
+                {% if container.shipment_type == "Maritime" %}
+                    {% trans "Maritime" %}
+                {% elif container.shipment_type == "Plane" %}
+                    {% trans "Plane" %}
+                {% else %}
+                    {{ container.shipment_type }}  <!-- Para otros tipos que no necesitan traducción -->
+                {% endif %}
+            </p>
+            <p><strong>{% trans "Created at:" %}</strong> <span id="created_at">{{ container.created_at }}</span></p>
+            <p><strong>{% trans "Updated at:" %}</strong> <span id="updated_at">{{ container.updated_at }}</span></p>
+        </div>
+
+        <div class="mb-3">
+            <p class="fw-bold text-dark">
+                {% trans "Total Weight" %} {{ total_weight }} {% trans "kg" %}
+            </p>
+            <p class="fw-bold text-dark">
+                {% trans "Total CMB" %} {{ total_volumetric_measure }} {% trans "m³" %}
+            </p>
+        </div>
+
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+            <a href="{% url 'create_package' container.id %}" class="btn btn-dark btn-block">
+                <i class="bi bi-plus-circle"></i> {% trans "Add Package" %}
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>{% trans "Tracking ID" %}</th>
+                        <th>{% trans "Pseudoname" %}</th>
+                        <th>{% trans "Weight" %}</th>
+                        <th>{% trans "CMB" %}</th>
+                        <th>{% trans "Contact Number" %}</th>
+                        <th>{% trans "Package type" %}</th>
+                        <th>{% trans "Delivered" %}</th>
+                        <th>{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for package in packages %}
+                        {% if package.id %}
+                            <tr>
+                                <td>{{ package.tracking_id }}</td>
+                                <td>{{ package.pseudoname }}</td>
+                                <td>{{ package.weight }} kg</td>
+                                <td>{{ package.volumetric_measure }} m³</td>
+                                <td>{{ package.contact_number }}</td>
+                                <td>
+                                    {% if package.package_type == "Caja" %}
+                                        {% trans "Box" %}
+                                    {% elif package.package_type == "Yute" %}
+                                        {% trans "Yute" %}
+                                    {% else %}
+                                        {{ package.package_type }}  <!-- Para otros tipos que no necesitan traducción -->
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if package.delivered %}
+                                        {% trans "Yes" %}
+                                    {% else %}
+                                        {% trans "No" %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                        <a href="{% url 'view_statuses' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a href="{% url 'download_package_info' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                            <i class="bi bi-file-earmark-pdf-fill"></i>
+                                        </a>
+                                        <a href="{% url 'edit_package' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <form action="{% url 'delete_package' package.id %}" method="post" class="d-inline me-2 rounded">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded" onclick="return confirm('{% trans "Are you sure you want to delete this package?" %}');">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7">{% trans "No packages found." %}</td>
+                            </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">{% trans "No packages found." %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function formatDate(dateString) {
+            const options = {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+            };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        const createdAtElement = document.getElementById('created_at');
+        const updatedAtElement = document.getElementById('updated_at');
+
+        if (createdAtElement) {
+            createdAtElement.textContent = formatDate(createdAtElement.textContent);
+        }
+        if (updatedAtElement) {
+            updatedAtElement.textContent = formatDate(updatedAtElement.textContent);
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
