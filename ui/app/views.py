@@ -1,22 +1,16 @@
 import requests
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
-from django.utils.translation.trans_real import translation
 from django.views import View
 from django.shortcuts import redirect
-from django.utils.translation import get_language, activate
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-
-def custom_404(request, exception=None):
-    return render(request, '404.html', status=404)
 
 def login_view(request):
     if request.method == 'POST':

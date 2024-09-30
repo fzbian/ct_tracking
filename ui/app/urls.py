@@ -1,12 +1,9 @@
-from tempfile import template
-
 from django.urls import path, include
 from django.views.generic import TemplateView
 
 from . import views
 
-#handler404 = TemplateView.as_view(template_name='404.html')
-handler404 = 'handler404'
+handler404 = TemplateView.as_view(template_name='404.html')
 
 urlpatterns = [
     path('', views.login_view, name='login'),
@@ -32,6 +29,4 @@ urlpatterns = [
 
     path('track/<str:tracking_id>/', views.PackageInfoView.as_view(), name='package_info'),
     path('search/', views.PackageSearchView.as_view(), name='package_search'),
-
-    path('404/', views.custom_404, name='custom_404'),
 ]
