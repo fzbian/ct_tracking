@@ -252,4 +252,7 @@ msgstr "Buscar paquete"
 msgid "The tracking ID is not valid or not exist"
 msgstr "El ID de seguimiento no es válido o no existe"
 
+msgid "Pieces"
+msgstr "Piezas"
+
 

@@ -258,5 +258,8 @@ msgstr "错误"
 msgid "The tracking ID is not valid or not exist"
 msgstr "追踪编号无效或不存在"
 
+msgid "Pieces"
+msgstr "件数"
+
 
 

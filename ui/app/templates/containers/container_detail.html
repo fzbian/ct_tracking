@@ -58,6 +58,7 @@
                         <th>{% trans "Pseudoname" %}</th>
                         <th>{% trans "Weight" %}</th>
                         <th>{% trans "CMB" %}</th>
+                        <th>{% trans "Pieces" %}</th>
                         <th>{% trans "Contact Number" %}</th>
                         <th>{% trans "Package type" %}</th>
                         <th>{% trans "Delivered" %}</th>
@@ -72,6 +73,7 @@
                                 <td>{{ package.pseudoname }}</td>
                                 <td>{{ package.weight }} kg</td>
                                 <td>{{ package.volumetric_measure }} m³</td>
+                                <td>{{ package.pieces }}</td>
                                 <td>{{ package.contact_number }}</td>
                                 <td>
                                     {% if package.package_type == "Caja" %}

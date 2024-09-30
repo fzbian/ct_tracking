@@ -181,6 +181,7 @@ class CreatePackageView(LoginRequiredMixin, View):
         pseudoname = request.POST.get('pseudoname')
         weight = request.POST.get('weight')
         volumetric_measure = request.POST.get('volumetric_measure')
+        pieces= request.POST.get('pieces')
         contact_number = request.POST.get('contact_number')
         container_id = request.POST.get('container_id')
         package_type = request.POST.get('package_type')
@@ -189,6 +190,7 @@ class CreatePackageView(LoginRequiredMixin, View):
             'pseudoname': pseudoname,
             'weight': weight,
             'volumetric_measure': volumetric_measure,
+            'pieces': pieces,
             'contact_number': contact_number,
             'package_type': package_type,
             'container_id': container_id
@@ -224,6 +226,7 @@ class EditPackageView(LoginRequiredMixin, View):
         pseudoname = request.POST.get('pseudoname')
         weight = request.POST.get('weight')
         volumetric_measure = request.POST.get('volumetric_measure')
+        pieces = request.POST.get('pieces')
         contact_number = request.POST.get('contact_number')
         container_id = request.POST.get('container_id')
         package_type = request.POST.get('package_type')
@@ -232,6 +235,7 @@ class EditPackageView(LoginRequiredMixin, View):
             'pseudoname': pseudoname,
             'weight': weight,
             'volumetric_measure': volumetric_measure,
+            'pieces': pieces,
             'contact_number': contact_number,
             'package_type': package_type,
             'container_id': container_id

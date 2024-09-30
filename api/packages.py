@@ -150,6 +150,7 @@ def create_package(package: PackageCreate, db: Session = Depends(get_db)):
         pseudoname=package.pseudoname,
         weight=package.weight,
         volumetric_measure=package.volumetric_measure,
+        pieces=package.pieces,
         contact_number=package.contact_number,
         container_id=package.container_id,
         tracking_id=tracking_id,  # Nuevo tracking ID
@@ -183,6 +184,7 @@ def get_info_by_tracking_id(tracking_id: str, db: Session = Depends(get_db)):
         pseudoname=db_package.pseudoname,
         weight=db_package.weight,
         volumetric_measure=db_package.volumetric_measure,
+        pieces=db_package.pieces,
         contact_number=db_package.contact_number,
         package_type=db_package.package_type,  # Añadido package_type
         container_id=db_package.container_id,
@@ -212,6 +214,8 @@ def update_package(package_id: int, package: PackageUpdate, db: Session = Depend
         db_package.weight = package.weight
     if package.volumetric_measure is not None:
         db_package.volumetric_measure = package.volumetric_measure
+    if package.pieces is not None:
+        db_package.pieces = package.pieces
     if package.contact_number is not None:
         db_package.contact_number = package.contact_number
     if package.delivered is not None:

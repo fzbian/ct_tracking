@@ -31,6 +31,7 @@ class Package(Base):
     weight = Column(Float, nullable=False)
     volumetric_measure = Column(Float, nullable=False)
     contact_number = Column(BigInteger, nullable=False)
+    pieces = Column(Integer, nullable=False)  # Nuevo atributo
     container_id = Column(Integer, ForeignKey('containers.id'), nullable=True)
     delivered = Column(Boolean, default=False)
     package_type = Column(Text, nullable=True)  # Nuevo atributo
@@ -91,12 +92,12 @@ class PackageWithContainerResponse(BaseModel):
     weight: float
     volumetric_measure: float
     contact_number: int
+    pieces: int  # Nuevo atributo
     container_id: Optional[int] = None
     package_type: Optional[str]  # Nuevo atributo
     container: Optional[ContainerResponse] = None
     statuses: List[StatusResponse] = []
     delivered: bool
-    package_type: Optional[str]  # Nuevo atributo
 
     class Config:
         orm_mode = True
@@ -107,6 +108,7 @@ class PackageCreate(BaseModel):
     weight: float
     volumetric_measure: float
     contact_number: int
+    pieces: int  # Nuevo atributo
     container_id: Optional[int] = None
     package_type: Optional[str] = None  # Nuevo atributo
 
@@ -117,6 +119,7 @@ class PackageResponse(BaseModel):
     weight: float
     volumetric_measure: float
     contact_number: int
+    pieces: int  # Nuevo atributo
     container_id: Optional[int] = None
     delivered: bool
     package_type: Optional[str]  # Nuevo atributo
@@ -140,6 +143,7 @@ class PackageUpdate(BaseModel):
     weight: Optional[float] = None
     volumetric_measure: Optional[float] = None
     contact_number: Optional[int] = None
+    pieces: Optional[int] = None  # Nuevo atributo
     delivered: Optional[bool] = None
     package_type: Optional[str] = None  # Nuevo atributo para actualizar
 

@@ -46,6 +46,10 @@
                 <label for="contact_number" class="form-label">{% trans "Contact Number" %}</label>
                 <input type="text" id="contact_number" name="contact_number" class="form-control" maxlength="10" pattern="\d{10}" required>
             </div>
+            <div class="mb-3">
+                <label for="pieces" class="form-label">{% trans "Pieces" %}:</label>
+                <input type="number" id="pieces" name="pieces" class="form-control" step="1" min="0" required>
+            </div>
 
             <div class="mb-3">
                 <label for="package_type" class="form-label">{% trans "Package type" %}</label>
