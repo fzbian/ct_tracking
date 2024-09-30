@@ -209,11 +209,9 @@ class EditPackageView(LoginRequiredMixin, View):
     template_name = 'packages/edit_package.html'
 
     def get(self, request, package_id):
-        # Obtener el paquete a editar
         response = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/{package_id}')
         package = response.json()
 
-        # Obtener los contenedores para el dropdown
         response_containers = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/')
         containers = response_containers.json()
 
@@ -239,15 +237,23 @@ class EditPackageView(LoginRequiredMixin, View):
             'container_id': container_id
         }
 
-        response = requests.put(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/{package_id}', json=data)
+        response = requests.put(
+            f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/{package_id}',
+            json=data)
 
         if response.status_code == 200:
             return redirect(f'/containers/{container_id}/')
 
+        package = requests.get(
+            f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/{package_id}').json()
+
+        # Devolver el formulario con los valores introducidos y el paquete original
         return render(request, self.template_name, {
             'error': 'Error updating package',
-            'package': data,
-            'containers': requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/').json()
+            'package': package,
+            'containers': requests.get(
+                f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/').json(),
+            'data': data
         })
 
 class PackageStatusDetailView(LoginRequiredMixin, View):
