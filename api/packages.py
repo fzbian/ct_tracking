@@ -1,11 +1,14 @@
 from typing import List
-
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter
 from models import Package, PackageCreate, PackageResponse, Container, PackageUpdate, StatusResponse, Status, \
     PackageWithContainerResponse, ContainerResponse
-from database import SessionLocal
 import random
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.responses import StreamingResponse
+from sqlalchemy.orm import Session
+from database import SessionLocal
+from io import *
+import weasyprint
 
 router = APIRouter()
 
@@ -16,19 +19,13 @@ def get_db():
     finally:
         db.close()
 
-def generate_custom_id(pseudoname: str) -> str:
-    random_numbers = random.randint(1000, 9999)  # Genera 4 dígitos aleatorios
-    pseudoname_part = pseudoname[:4].upper()  # Toma las primeras 4 letras del pseudoname
-    return f"PAQ{random_numbers}{pseudoname_part}"
-
-
-from fastapi import FastAPI, HTTPException, Depends
-from fastapi.responses import StreamingResponse
-from sqlalchemy.orm import Session
-from models import Package
-from database import SessionLocal
-from weasyprint import HTML
-import io
+def generate_custom_id(db: Session) -> str:
+    while True:
+        random_numbers = random.randint(10000, 99999)  # Genera 5 dígitos aleatorios
+        tracking_id = str(random_numbers)
+        # Verificar si el tracking_id ya existe en la base de datos
+        if not db.query(Package).filter(Package.tracking_id == tracking_id).first():
+            return tracking_id
 
 app = FastAPI()
 
@@ -39,70 +36,474 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/download/{package_id}")
-def download_package_info(package_id: int, db: Session = Depends(get_db)):
-    # Buscar el paquete por ID
+router = APIRouter()
+
+@router.get("/downloadReceipt/{package_id}")
+def download_receipt(package_id: int, db: Session = Depends(get_db)):
     db_package = db.query(Package).filter(Package.id == package_id).first()
     if not db_package:
         raise HTTPException(status_code=404, detail="Package not found")
 
-    # Obtener todos los estados asociados al paquete
-    statuses = db_package.statuses
+    logo_path = "http://imgfz.com/i/PuLaXJD.png"
 
-    # Generar el HTML
     html_content = f"""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Package Info - {db_package.tracking_id}</title>
-        <style>
-            body {{
-                background-color: #f8f9fa;
-                font-family: Arial, sans-serif;
-            }}
-            .header-title {{
-                color: #dc3545;
-                font-weight: bold;
-                text-align: center;
-                margin-top: 20px;
-            }}
-            .container {{
-                margin: 20px;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }}
-            .logo {{
-                height: 40px;
-                margin-right: 10px;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1 class="header-title">Package Information</h1>
-            <p><strong>Tracking ID:</strong> {db_package.tracking_id}</p>
-            <p><strong>Pseudoname:</strong> {db_package.pseudoname}</p>
-            <p><strong>Weight:</strong> {db_package.weight} kg</p>
-            <p><strong>Volumetric Measure:</strong> {db_package.volumetric_measure} m³</p>
-            <p><strong>Contact Number:</strong> {db_package.contact_number}</p>
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<title></title>
+	<meta content="summary_large_image" name="twitter:card" />
+	<meta content="website" property="og:type" />
+	<meta content="" property="og:description" />
+	<meta content="https://of567tzhns.preview-beefreedesign.com/ZCGjl" property="og:url" />
+	<meta content="https://pro-bee-beepro-thumbnail.getbee.io/messages/1276261/1262412/2264210/11735807_large.jpg" property="og:image" />
+	<meta content="" property="og:title" />
+	<meta content="" name="description" />
+	<meta charset="utf-8" />
+	<meta content="width=device-width" name="viewport" />
+	<style>
+		.bee-row,
+		.bee-row-content {{
+			position: relative
+		}}
+
+		.bee-row-3,
+		body {{
+			background-color: #ffffff
+		}}
+
+		.bee-row-1,
+		.bee-row-1 .bee-row-content,
+		.bee-row-2,
+		.bee-row-3 {{
+			background-repeat: no-repeat
+		}}
+
+		body {{
+			color: #000000;
+			font-family: Arial, Helvetica, sans-serif
+		}}
+
+		a {{
+			color: #7747FF
+		}}
+
+		* {{
+			box-sizing: border-box
+		}}
+
+		body,
+		h1 {{
+			margin: 0
+		}}
+
+		.bee-row-content {{
+			max-width: 1440px;
+			margin: 0 auto;
+			display: flex
+		}}
+
+		.bee-row-content .bee-col-w3 {{
+			flex-basis: 25%
+		}}
+
+		.bee-row-content .bee-col-w9 {{
+			flex-basis: 75%
+		}}
+
+		.bee-row-content .bee-col-w12 {{
+			flex-basis: 100%
+		}}
+
+		.bee-icon .bee-icon-label-right a {{
+			text-decoration: none
+		}}
+
+		.bee-divider,
+		.bee-image {{
+			overflow: auto
+		}}
+
+		.bee-divider .center,
+		.bee-image .bee-center {{
+			margin: 0 auto
+		}}
+
+		.bee-row-1 .bee-col-1 .bee-block-1 {{
+			width: 100%
+		}}
+
+		.bee-icon {{
+			display: inline-block;
+			vertical-align: middle
+		}}
+
+		.bee-icon .bee-content {{
+			display: flex;
+			align-items: center
+		}}
+
+		.bee-image img {{
+			display: block;
+			width: 100%
+		}}
+
+		.bee-table table {{
+			border-collapse: collapse;
+			width: 100%
+		}}
+
+		.bee-table table tbody,
+		.bee-table table thead {{
+			vertical-align: top
+		}}
+
+		.bee-table table td,
+		.bee-table table th {{
+			padding: 10px;
+			word-break: break-word
+		}}
+
+		@media (max-width:768px) {{
+			.bee-row-content:not(.no_stack) {{
+				display: block
+			}}
+		}}
+
+		.bee-row-1 .bee-row-content {{
+			border-radius: 0;
+			color: #000000
+		}}
+
+		.bee-row-1 .bee-col-1,
+		.bee-row-1 .bee-col-2,
+		.bee-row-2 .bee-col-1,
+		.bee-row-3 .bee-col-1 {{
+			padding-bottom: 5px;
+			padding-top: 5px
+		}}
+
+		.bee-row-1 .bee-col-2 .bee-block-1 {{
+			padding: 10px;
+			text-align: center;
+			width: 100%
+		}}
+
+		.bee-row-2 .bee-row-content,
+		.bee-row-3 .bee-row-content {{
+			background-repeat: no-repeat;
+			color: #000000
+		}}
+
+		.bee-row-2 .bee-col-1 .bee-block-1,
+		.bee-row-2 .bee-col-1 .bee-block-2,
+		.bee-row-2 .bee-col-1 .bee-block-3 {{
+			padding: 10px
+		}}
+
+		.bee-row-3 .bee-col-1 .bee-block-1 {{
+			color: #1e0e4b;
+			font-family: Inter, sans-serif;
+			font-size: 15px;
+			padding-bottom: 5px;
+			padding-top: 5px;
+			text-align: center
+		}}
+
+		.bee-row-3 .bee-col-1 .bee-block-1 .bee-icon-image {{
+			padding: 5px 6px 5px 5px
+		}}
+
+		.bee-row-3 .bee-col-1 .bee-block-1 .bee-icon:not(.bee-icon-first) .bee-content {{
+			margin-left: 0
+		}}
+
+		.bee-row-3 .bee-col-1 .bee-block-1 .bee-icon::not(.bee-icon-last) .bee-content {{
+			margin-right: 0
+		}}
+	</style>
+</head>
+
+<body>
+	<div class="bee-page-container">
+		<div class="bee-row bee-row-1">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w3">
+					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://05f1f637e3.imgdist.com/pub/bfra/5vusj7sf/aki/mew/n9b/PuLaXJD.png" style="max-width:108px;" /></div>
+				</div>
+				<div class="bee-col bee-col-2 bee-col-w9">
+					<div class="bee-block bee-block-1 bee-heading">
+						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:18px;font-weight:700;letter-spacing:normal;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">RECEIPT #{db_package.tracking_id}</span> </h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bee-row bee-row-2">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
+					<div class="bee-block bee-block-1 bee-table">
+						<table style="table-layout:fixed;direction:ltr;background-color:transparent;font-family:Arial, Helvetica, sans-serif;font-weight:400;color:#101112;text-align:left;letter-spacing:0px;">
+							<thead style="background-color:#f2f2f2;color:#101112;font-size:14px;line-height:120%;text-align:left;">
+								<tr>
+									<th style="font-weight:700;border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">NAME</th>
+									<th style="font-weight:700;border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">DATE</th>
+								</tr>
+							</thead>
+							<tbody style="font-size:16px;line-height:120%;">
+								<tr>
+									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">{db_package.pseudoname}</td>
+									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">01-02-2024</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="bee-block bee-block-2 bee-divider">
+						<div class="center bee-separator" style="border-top:1px solid #dddddd;width:100%;"></div>
+					</div>
+					<div class="bee-block bee-block-3 bee-table">
+						<table style="table-layout:fixed;direction:ltr;background-color:transparent;font-family:Arial, Helvetica, sans-serif;font-weight:400;color:#101112;text-align:left;letter-spacing:0px;">
+							<thead style="background-color:#f2f2f2;color:#101112;font-size:14px;line-height:120%;text-align:center;">
+								<tr>
+									<th style="font-weight:700;border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">PACKING</th>
+									<th style="font-weight:700;border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">PIECES</th>
+									<th style="font-weight:700;border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">CBM</th>
+									<th style="font-weight:700;border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">KG</th>
+								</tr>
+							</thead>
+							<tbody style="font-size:14px;line-height:120%;">
+								<tr>
+									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">{db_package.package_type}</td>
+									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">{db_package.pieces}</td>
+									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">{db_package.volumetric_measure}</td>
+									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">{db_package.weight}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
     """
 
-    html_content += """
-            </ul>
-        </div>
-    </body>
-    </html>
+    pdf_file = BytesIO()
+    weasyprint.HTML(string=html_content).write_pdf(pdf_file)
+
+    return StreamingResponse(BytesIO(pdf_file.getvalue()), media_type='application/pdf',
+                                headers={"Content-Disposition": f"attachment; filename={db_package.tracking_id}.pdf"})
+
+@router.get("/downloadLabeled/{package_id}")
+def download_package_info(package_id: int, db: Session = Depends(get_db)):
+    db_package = db.query(Package).filter(Package.id == package_id).first()
+    if not db_package:
+        raise HTTPException(status_code=200, detail="Package not found")
+
+    logo_path = "http://imgfz.com/i/PuLaXJD.png"
+
+    html_content = f"""
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<title></title>
+	<meta content="summary_large_image" name="twitter:card" />
+	<meta content="website" property="og:type" />
+	<meta content="" property="og:description" />
+	<meta content="https://of567tzhns.preview-beefreedesign.com/ZCGjl" property="og:url" />
+	<meta content="https://pro-bee-beepro-thumbnail.getbee.io/messages/1276261/1262412/2264210/11735807_large.jpg" property="og:image" />
+	<meta content="" property="og:title" />
+	<meta content="" name="description" />
+	<meta charset="utf-8" />
+	<meta content="width=device-width" name="viewport" />
+	<style>
+		.bee-row,
+		.bee-row-content {{
+			position: relative
+		}}
+
+		.bee-row-5,
+		body {{
+			background-color: #ffffff
+		}}
+
+		.bee-row-1,
+		.bee-row-2,
+		.bee-row-3,
+		.bee-row-4,
+		.bee-row-5,
+		.bee-row-5 .bee-row-content {{
+			background-repeat: no-repeat
+		}}
+
+		body {{
+			color: #000000;
+			font-family: Arial, Helvetica, sans-serif
+		}}
+
+		a {{
+			color: #7747FF
+		}}
+
+		* {{
+			box-sizing: border-box
+		}}
+
+		body,
+		h1 {{
+			margin: 0
+		}}
+
+		.bee-row-content {{
+			max-width: 1440px;
+			margin: 0 auto;
+			display: flex
+		}}
+
+		.bee-row-content .bee-col-w12 {{
+			flex-basis: 100%
+		}}
+
+		.bee-icon .bee-icon-label-right a {{
+			text-decoration: none
+		}}
+
+		.bee-image {{
+			overflow: auto
+		}}
+
+		.bee-image .bee-center {{
+			margin: 0 auto
+		}}
+
+		.bee-row-1 .bee-col-1 .bee-block-1 {{
+			width: 100%
+		}}
+
+		.bee-row-1 .bee-col-1,
+		.bee-row-2 .bee-col-1,
+		.bee-row-3 .bee-col-1,
+		.bee-row-4 .bee-col-1,
+		.bee-row-5 .bee-col-1,
+		.bee-row-5 .bee-col-1 .bee-block-1 {{
+			padding-bottom: 5px;
+			padding-top: 5px
+		}}
+
+		.bee-icon {{
+			display: inline-block;
+			vertical-align: middle
+		}}
+
+		.bee-icon .bee-content {{
+			display: flex;
+			align-items: center
+		}}
+
+		.bee-image img {{
+			display: block;
+			width: 100%
+		}}
+
+		@media (max-width:768px) {{
+			.bee-row-content:not(.no_stack) {{
+				display: block
+			}}
+		}}
+
+		.bee-row-1 .bee-row-content,
+		.bee-row-2 .bee-row-content,
+		.bee-row-3 .bee-row-content,
+		.bee-row-4 .bee-row-content {{
+			background-repeat: no-repeat;
+			border-radius: 0;
+			color: #000000
+		}}
+
+		.bee-row-2 .bee-col-1 .bee-block-1,
+		.bee-row-3 .bee-col-1 .bee-block-1,
+		.bee-row-3 .bee-col-1 .bee-block-2,
+		.bee-row-3 .bee-col-1 .bee-block-3 {{
+			text-align: center;
+			width: 100%
+		}}
+
+		.bee-row-5 .bee-row-content {{
+			color: #000000
+		}}
+
+		.bee-row-5 .bee-col-1 .bee-block-1 {{
+			color: #1e0e4b;
+			font-family: Inter, sans-serif;
+			font-size: 15px;
+			text-align: center
+		}}
+
+		.bee-row-5 .bee-col-1 .bee-block-1 .bee-icon-image {{
+			padding: 5px 6px 5px 5px
+		}}
+
+		.bee-row-5 .bee-col-1 .bee-block-1 .bee-icon:not(.bee-icon-first) .bee-content {{
+			margin-left: 0
+		}}
+
+		.bee-row-5 .bee-col-1 .bee-block-1 .bee-icon::not(.bee-icon-last) .bee-content {{
+			margin-right: 0
+		}}
+	</style>
+</head>
+
+<body>
+	<div class="bee-page-container">
+		<div class="bee-row bee-row-1">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
+					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://05f1f637e3.imgdist.com/pub/bfra/5vusj7sf/aki/mew/n9b/PuLaXJD.png" style="max-width:216px;" /></div>
+				</div>
+			</div>
+		</div>
+		<div class="bee-row bee-row-2">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
+					<div class="bee-block bee-block-1 bee-heading">
+						<h1 style="color:#000000;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:90px;font-weight:700;letter-spacing:normal;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">{db_package.tracking_id}</span> </h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bee-row bee-row-3">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12">
+					<div class="bee-block bee-block-1 bee-heading">
+						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">CT-{db_package.pseudoname}</span> </h1>
+					</div>
+					<div class="bee-block bee-block-2 bee-heading">
+						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">01/02/24</span> </h1>
+					</div>
+					<div class="bee-block bee-block-3 bee-heading">
+						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">#{db_package.pieces}</span> </h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bee-row bee-row-4">
+			<div class="bee-row-content">
+				<div class="bee-col bee-col-1 bee-col-w12"></div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
     """
 
-    # Convertir HTML a PDF
-    pdf_file = HTML(string=html_content).write_pdf()
+    pdf_file = BytesIO()
+    weasyprint.HTML(string=html_content).write_pdf(pdf_file)
 
-    # Retornar el PDF como respuesta
-    return StreamingResponse(io.BytesIO(pdf_file), media_type='application/pdf', headers={"Content-Disposition": f"attachment; filename=package_info_{package_id}.pdf"})
+    return StreamingResponse(BytesIO(pdf_file.getvalue()), media_type='application/pdf',
+                             headers={"Content-Disposition": f"attachment; filename=labeled-{db_package.tracking_id}.pdf"})
 
 @router.put("/{package_id}/deliver", response_model=PackageResponse)
 def deliver_package(package_id: int, db: Session = Depends(get_db)):
@@ -143,7 +544,7 @@ def create_package(package: PackageCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Container not found")
 
     # Generar tracking ID personalizado
-    tracking_id = generate_custom_id(package.pseudoname)
+    tracking_id = generate_custom_id(db)
 
     # Crear el paquete con el tracking ID y el nuevo campo package_type
     db_package = Package(

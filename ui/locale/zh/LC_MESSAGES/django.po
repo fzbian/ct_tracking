@@ -261,5 +261,8 @@ msgstr "追踪编号无效或不存在"
 msgid "Pieces"
 msgstr "件数"
 
+msgid "The status has been added."
+msgstr "状态已添加。"
+
 
 

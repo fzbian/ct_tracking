@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from starlette.staticfiles import StaticFiles
+
 from api import containers, packages, health, status, config
 from database import engine, Base
 
@@ -13,6 +15,8 @@ app.include_router(packages.router, prefix="/packages", tags=["packages"])
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(config.router, prefix="/config", tags=["config"])
 app.include_router(status.router, prefix="/status", tags=["statuses"])
+
+app.mount("/static", StaticFiles(directory="ui/app/templates/static"), name="static")
 
 
 @app.get("/")

@@ -359,10 +359,27 @@ class DeleteContainerView(LoginRequiredMixin, View):
         else:
             return HttpResponse('Error deleting container', status=500)
 
-class DownloadPackageView(LoginRequiredMixin, View):
+class DownloadPackageReceiptView(LoginRequiredMixin, View):
     def get(self, request, package_id):
         # Realizar la solicitud al endpoint para descargar el archivo
-        response = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/download/{package_id}')
+        response = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/downloadReceipt/{package_id}')
+
+        if response.status_code == 200:
+            # Suponiendo que el archivo se devuelve en el cuerpo de la respuesta
+            file_name = response.headers.get('Content-Disposition', 'attachment; filename="default_filename"').split('filename=')[1].strip('"')
+            content_type = response.headers.get('Content-Type', 'application/octet-stream')
+
+            # Crear una respuesta con el archivo
+            response_to_return = HttpResponse(response.content, content_type=content_type)
+            response_to_return['Content-Disposition'] = f'attachment; filename="{file_name}"'
+            return response_to_return
+        else:
+            return HttpResponse('Error downloading file', status=500)
+
+class DownloadPackageLabeledView(LoginRequiredMixin, View):
+    def get(self, request, package_id):
+        # Realizar la solicitud al endpoint para descargar el archivo
+        response = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/downloadLabeled/{package_id}')
 
         if response.status_code == 200:
             # Suponiendo que el archivo se devuelve en el cuerpo de la respuesta
@@ -386,7 +403,7 @@ class ChangeStatusByContainerView(LoginRequiredMixin, View):
 
         # Hacer la solicitud POST al endpoint FastAPI para cambiar el estado
         response = requests.post(
-            f'http://127.0.0.1:8001/containers/changeStatusByContainer/{container_id}',
+            f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}//containers/changeStatusByContainer/{container_id}',
             json={'status': status}
         )
 
@@ -394,7 +411,7 @@ class ChangeStatusByContainerView(LoginRequiredMixin, View):
             # Si el checkbox está marcado, hacer la solicitud para marcar como entregados
             if delivered:
                 deliver_response = requests.put(
-                    f'http://127.0.0.1:8001/packages/deliverByContainer/{container_id}',
+                    f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/deliverByContainer/{container_id}',
                     json={'delivered': True}  # Se puede enviar True ya que el checkbox estaba marcado
                 )
 
@@ -404,7 +421,11 @@ class ChangeStatusByContainerView(LoginRequiredMixin, View):
                         'error': 'Error marking packages as delivered. Please try again.'
                     })
 
-            return redirect('container_list')
+            # Mensaje de éxito
+            return render(request, 'containers/add_status_by_container.html', {
+                'container_id': container_id,
+                'success': 'Status updated successfully.'
+            })
         else:
             return render(request, 'containers/add_status_by_container.html', {
                 'container_id': container_id,

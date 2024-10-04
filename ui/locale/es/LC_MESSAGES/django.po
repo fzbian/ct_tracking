@@ -255,4 +255,7 @@ msgstr "El ID de seguimiento no es válido o no existe"
 msgid "Pieces"
 msgstr "Piezas"
 
+msgid "The status has been added."
+msgstr "El estado ha sido agregado."
+
 

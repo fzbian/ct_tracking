@@ -10,7 +10,7 @@ ALLOWED_HOSTS = ['*']
 
 # Static files
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "ui/app/templates/static"]
+STATICFILES_DIRS = [BASE_DIR / "app/templates/static"]
 
 # Locale paths
 LOCALE_PATHS = [

@@ -96,8 +96,13 @@
                                         <a href="{% url 'view_statuses' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>
-                                        <a href="{% url 'download_package_info' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                        <a href="{% url 'download_package_receipt' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
                                             <i class="bi bi-file-earmark-pdf-fill"></i>
+                                            {% trans "Receipt" %}
+                                        </a>
+                                        <a href="{% url 'download_package_labeled' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
+                                            <i class="bi bi-file-earmark-pdf-fill"></i>
+                                            {% trans "Labeled" %}
                                         </a>
                                         <a href="{% url 'edit_package' package.id %}" class="btn btn-sm btn-outline-dark me-2 rounded">
                                             <i class="bi bi-pencil-fill"></i>
