@@ -111,20 +111,23 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 
+
 class ContainerDetailView(LoginRequiredMixin, View):
     template_name = 'containers/container_detail.html'
 
     def get(self, request, pk):
         # Obtener los detalles del contenedor
-        response = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getContainerById/{pk}')
+        response = requests.get(
+            f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getContainerById/{pk}')
         container = response.json()
 
         # Obtener el peso total y la medida volumétrica total usando el nuevo endpoint
-        response_values = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getValuesByContainer/{pk}')
+        response_values = requests.get(
+            f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getValuesByContainer/{pk}')
         if response_values.status_code == 200:
             values = response_values.json()
-            total_weight = values.get('total_weight')
-            total_volumetric_measure = values.get('total_volumetric_measure')
+            total_weight = values.get('total_weight', 'N/A')
+            total_volumetric_measure = values.get('total_volumetric_measure', 'N/A')
         else:
             total_weight = 'N/A'
             total_volumetric_measure = 'N/A'
@@ -138,39 +141,48 @@ class ContainerDetailView(LoginRequiredMixin, View):
         delivered = request.GET.get('delivered')
 
         # Obtener los paquetes asociados al contenedor
-        response_packages = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getPackagesByContainer/{pk}')
-        packages = response_packages.json()
+        response_packages = requests.get(
+            f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getPackagesByContainer/{pk}')
+
+        # Verificar si la respuesta es correcta
+        if response_packages.status_code == 200:
+            packages = response_packages.json()  # Se espera que esto sea una lista de paquetes
+        else:
+            packages = []  # Asignar una lista vacía si la respuesta no es válida
+
         filtered_packages = []
 
         # Filtrar la lista de paquetes
         for package in packages:
-            # Convertir la fecha del paquete a dd/mm/aaaa
-            package_created_at = datetime.strptime(package.get('created_at'), '%Y-%m-%dT%H:%M:%S')
-            package_created_at_str = package_created_at.strftime('%d/%m/%Y')
+            # Asegurarse de que package sea un diccionario
+            if isinstance(package, dict):
+                # Convertir la fecha del paquete a dd/mm/aaaa
+                package_created_at = datetime.strptime(package.get('created_at', ''), '%Y-%m-%dT%H:%M:%S')
+                package_created_at_str = package_created_at.strftime('%d/%m/%Y')
 
-            if tracking_id and package.get('tracking_id') != tracking_id:
-                continue
-            if min_pieces:
-                min_pieces = int(min_pieces)
-                if package.get('pieces') < min_pieces:
+                if tracking_id and package.get('tracking_id') != tracking_id:
                     continue
-            if max_pieces:
-                max_pieces = int(max_pieces)
-                if package.get('pieces') > max_pieces:
+                if min_pieces:
+                    min_pieces = int(min_pieces)
+                    if package.get('pieces') < min_pieces:
+                        continue
+                if max_pieces:
+                    max_pieces = int(max_pieces)
+                    if package.get('pieces') > max_pieces:
+                        continue
+                # Convertir la fecha del filtro a dd/mm/aaaa
+                if created_at_str:
+                    created_at_datetime = datetime.strptime(created_at_str, '%Y-%m-%d')
+                    created_at_str_formatted = created_at_datetime.strftime('%d/%m/%Y')
+                    if package_created_at_str != created_at_str_formatted:
+                        continue
+                if package_type and package.get('package_type') != package_type:
                     continue
-            # Convertir la fecha del filtro a dd/mm/aaaa
-            if created_at_str:
-                created_at_datetime = datetime.strptime(created_at_str, '%Y-%m-%d')
-                created_at_str_formatted = created_at_datetime.strftime('%d/%m/%Y')
-                if package_created_at_str != created_at_str_formatted:
+                if delivered == 'True' and not package.get('delivered'):
                     continue
-            if package_type and package.get('package_type') != package_type:
-                continue
-            if delivered == 'True' and not package.get('delivered'):
-                continue
-            if delivered == 'False' and package.get('delivered'):
-                continue
-            filtered_packages.append(package)
+                if delivered == 'False' and package.get('delivered'):
+                    continue
+                filtered_packages.append(package)
 
         # Pasar los valores al template
         return render(request, self.template_name, {
@@ -179,6 +191,7 @@ class ContainerDetailView(LoginRequiredMixin, View):
             'total_weight': total_weight,
             'total_volumetric_measure': total_volumetric_measure,
         })
+
 
 class ContainerCreateView(LoginRequiredMixin, View):
     template_name = 'containers/container_form.html'
