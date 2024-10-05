@@ -36,7 +36,7 @@ msgstr "Actualizado el:"
 msgid "Total Weight"
 msgstr "Peso total"
 
-msgid "Total CMB"
+msgid "Total CBM"
 msgstr "Volumen total"
 
 msgid "Add Package"
@@ -51,7 +51,7 @@ msgstr "Pseudoname"
 msgid "Weight"
 msgstr "Peso"
 
-msgid "CMB"
+msgid "CBM"
 msgstr "Volumen"
 
 msgid "kg"
@@ -257,5 +257,24 @@ msgstr "Piezas"
 
 msgid "The status has been added."
 msgstr "El estado ha sido agregado."
+
+
+msgid "Min Pieces"
+msgstr "Piezas minimas"
+
+msgid "Max Pieces"
+msgstr "Piezas maximas"
+
+msgid "Created at"
+msgstr "Creado el"
+
+msgid "All"
+msgstr "Todos"
+
+msgid "Filter"
+msgstr "Filtrar"
+
+msgid "Clear Filters"
+msgstr "Limpiar filtros"
 
 

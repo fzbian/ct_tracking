@@ -36,7 +36,7 @@ msgstr "更新于："
 msgid "Total Weight"
 msgstr "总重量："
 
-msgid "Total CMB"
+msgid "Total CBM"
 msgstr "总体积："
 
 msgid "Add Package"
@@ -51,7 +51,7 @@ msgstr "假名"
 msgid "Weight"
 msgstr "重量"
 
-msgid "CMB"
+msgid "CBM"
 msgstr "体积"
 
 msgid "kg"
@@ -264,5 +264,20 @@ msgstr "件数"
 msgid "The status has been added."
 msgstr "状态已添加。"
 
+msgid "Min Pieces"
+msgstr "最小件数"
 
+msgid "Max Pieces"
+msgstr "最大件数"
 
+msgid "Created at"
+msgstr "创建于"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Filter"
+msgstr "过滤"
+
+msgid "Clear Filters"
+msgstr "清除过滤器"

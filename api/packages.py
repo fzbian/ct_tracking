@@ -46,6 +46,8 @@ def download_receipt(package_id: int, db: Session = Depends(get_db)):
 
     logo_path = "http://imgfz.com/i/PuLaXJD.png"
 
+    created_at = db_package.created_at.strftime("%d-%m-%Y")
+
     html_content = f"""
 <!DOCTYPE html>
 <html lang="">
@@ -252,7 +254,7 @@ def download_receipt(package_id: int, db: Session = Depends(get_db)):
 							<tbody style="font-size:16px;line-height:120%;">
 								<tr>
 									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">{db_package.pseudoname}</td>
-									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">01-02-2024</td>
+									<td style="border-top:1px solid #dddddd;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;border-left:1px solid #dddddd;">{created_at}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -302,6 +304,7 @@ def download_package_info(package_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=200, detail="Package not found")
 
     logo_path = "http://imgfz.com/i/PuLaXJD.png"
+    created_at = db_package.created_at.strftime("%d-%m-%Y")
 
     html_content = f"""
 <!DOCTYPE html>
@@ -480,7 +483,7 @@ def download_package_info(package_id: int, db: Session = Depends(get_db)):
 						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">CT-{db_package.pseudoname}</span> </h1>
 					</div>
 					<div class="bee-block bee-block-2 bee-heading">
-						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">01/02/24</span> </h1>
+						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">{created_at}</span> </h1>
 					</div>
 					<div class="bee-block bee-block-3 bee-heading">
 						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">#{db_package.pieces}</span> </h1>
@@ -562,8 +565,7 @@ def create_package(package: PackageCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(db_package)
 
-    # Agregar un nuevo estado a ese paquete "EN PREPARACION"
-    status = Status(package_id=db_package.id, status="EN PREPARACION")
+    status = Status(package_id=db_package.id, status="Recibimos tu envio")
     db.add(status)
     db.commit()
 
@@ -591,7 +593,8 @@ def get_info_by_tracking_id(tracking_id: str, db: Session = Depends(get_db)):
         container_id=db_package.container_id,
         container=ContainerResponse.from_orm(container) if container else None,
         statuses=[StatusResponse.from_orm(status) for status in statuses],
-        delivered=db_package.delivered  # Aquí se añade el campo delivered
+        delivered=db_package.delivered,  # Aquí se añade el campo delivered
+        created_at=db_package.created_at  # Añadido created_at
     )
 
     return package_response

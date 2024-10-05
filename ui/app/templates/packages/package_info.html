@@ -74,9 +74,10 @@
                 <p><strong>Tracking ID:</strong> {{ package.tracking_id }}</p>
                 <p><strong>Pseudoname:</strong> {{ package.pseudoname }}</p>
                 <p><strong>Peso:</strong> {{ package.weight }} kg</p>
-                <p><strong>Medida Volumétrica:</strong> {{ package.volumetric_measure }} m³</p>
+                <p><strong>CBM:</strong> {{ package.volumetric_measure }} m³</p>
                 <p><strong>Piezas:</strong> {{ package.pieces }}</p>
                 <p><strong>Tipo de paquete:</strong> {{ package.package_type }}</p>
+                <p><strong>Fecha de creación:</strong> <span id="created-at">{{ package.created_at }}</span></p>
             </div>
         </div>
 
@@ -150,6 +151,11 @@
                 const originalDate = element.getAttribute('data-datetime');
                 element.textContent = formatDateTime(originalDate);
             });
+
+            // Formatea la fecha de creación
+            const createdAtElement = document.getElementById('created-at');
+            const originalCreatedAt = createdAtElement.textContent;
+            createdAtElement.textContent = formatDateTime(originalCreatedAt);
         });
     </script>
 </body>

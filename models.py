@@ -31,10 +31,11 @@ class Package(Base):
     weight = Column(Float, nullable=False)
     volumetric_measure = Column(Float, nullable=False)
     contact_number = Column(BigInteger, nullable=False)
-    pieces = Column(Integer, nullable=False)  # Nuevo atributo
+    pieces = Column(Integer, nullable=False)  # Atributo existente
     container_id = Column(Integer, ForeignKey('containers.id'), nullable=True)
     delivered = Column(Boolean, default=False)
-    package_type = Column(Text, nullable=True)  # Nuevo atributo
+    package_type = Column(Text, nullable=True)  # Atributo existente
+    created_at = Column(TIMESTAMP, server_default=func.now())  # Nueva columna automatizada
 
     statuses = relationship("Status", back_populates="package", cascade="all, delete-orphan")
     container = relationship("Container", back_populates="packages")
@@ -92,12 +93,14 @@ class PackageWithContainerResponse(BaseModel):
     weight: float
     volumetric_measure: float
     contact_number: int
-    pieces: int  # Nuevo atributo
+    pieces: int  # Atributo existente
     container_id: Optional[int] = None
-    package_type: Optional[str]  # Nuevo atributo
+    package_type: Optional[str]  # Atributo existente
+    created_at: datetime  # Nuevo atributo en la respuesta
     container: Optional[ContainerResponse] = None
     statuses: List[StatusResponse] = []
     delivered: bool
+    created_at: datetime  # Nuevo atributo en la respuesta
 
     class Config:
         orm_mode = True
@@ -108,9 +111,9 @@ class PackageCreate(BaseModel):
     weight: float
     volumetric_measure: float
     contact_number: int
-    pieces: int  # Nuevo atributo
+    pieces: int  # Atributo existente
     container_id: Optional[int] = None
-    package_type: Optional[str] = None  # Nuevo atributo
+    package_type: Optional[str] = None  # Atributo existente
 
 class PackageResponse(BaseModel):
     id: int
@@ -119,10 +122,11 @@ class PackageResponse(BaseModel):
     weight: float
     volumetric_measure: float
     contact_number: int
-    pieces: int  # Nuevo atributo
+    pieces: int  # Atributo existente
     container_id: Optional[int] = None
     delivered: bool
-    package_type: Optional[str]  # Nuevo atributo
+    package_type: Optional[str]  # Atributo existente
+    created_at: datetime  # Nuevo atributo en la respuesta
 
     class Config:
         orm_mode = True
@@ -143,9 +147,9 @@ class PackageUpdate(BaseModel):
     weight: Optional[float] = None
     volumetric_measure: Optional[float] = None
     contact_number: Optional[int] = None
-    pieces: Optional[int] = None  # Nuevo atributo
+    pieces: Optional[int] = None  # Atributo existente
     delivered: Optional[bool] = None
-    package_type: Optional[str] = None  # Nuevo atributo para actualizar
+    package_type: Optional[str] = None  # Atributo existente para actualizar
 
     class Config:
         orm_mode = True

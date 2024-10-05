@@ -104,6 +104,13 @@ class ArchiveContainerView(LoginRequiredMixin, View):
                 'error': 'Error archiving container. Please try again.',
             })
 
+import os
+import requests
+from django.shortcuts import render
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime
+
 class ContainerDetailView(LoginRequiredMixin, View):
     template_name = 'containers/container_detail.html'
 
@@ -111,10 +118,6 @@ class ContainerDetailView(LoginRequiredMixin, View):
         # Obtener los detalles del contenedor
         response = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getContainerById/{pk}')
         container = response.json()
-
-        # Obtener los paquetes asociados al contenedor
-        response_packages = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getPackagesByContainer/{pk}')
-        packages = response_packages.json()
 
         # Obtener el peso total y la medida volumétrica total usando el nuevo endpoint
         response_values = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getValuesByContainer/{pk}')
@@ -126,10 +129,53 @@ class ContainerDetailView(LoginRequiredMixin, View):
             total_weight = 'N/A'
             total_volumetric_measure = 'N/A'
 
+        # Filtrar paquetes
+        tracking_id = request.GET.get('tracking_id')
+        min_pieces = request.GET.get('min_pieces')
+        max_pieces = request.GET.get('max_pieces')
+        created_at_str = request.GET.get('created_at')
+        package_type = request.GET.get('package_type')
+        delivered = request.GET.get('delivered')
+
+        # Obtener los paquetes asociados al contenedor
+        response_packages = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/getPackagesByContainer/{pk}')
+        packages = response_packages.json()
+        filtered_packages = []
+
+        # Filtrar la lista de paquetes
+        for package in packages:
+            # Convertir la fecha del paquete a dd/mm/aaaa
+            package_created_at = datetime.strptime(package.get('created_at'), '%Y-%m-%dT%H:%M:%S')
+            package_created_at_str = package_created_at.strftime('%d/%m/%Y')
+
+            if tracking_id and package.get('tracking_id') != tracking_id:
+                continue
+            if min_pieces:
+                min_pieces = int(min_pieces)
+                if package.get('pieces') < min_pieces:
+                    continue
+            if max_pieces:
+                max_pieces = int(max_pieces)
+                if package.get('pieces') > max_pieces:
+                    continue
+            # Convertir la fecha del filtro a dd/mm/aaaa
+            if created_at_str:
+                created_at_datetime = datetime.strptime(created_at_str, '%Y-%m-%d')
+                created_at_str_formatted = created_at_datetime.strftime('%d/%m/%Y')
+                if package_created_at_str != created_at_str_formatted:
+                    continue
+            if package_type and package.get('package_type') != package_type:
+                continue
+            if delivered == 'True' and not package.get('delivered'):
+                continue
+            if delivered == 'False' and package.get('delivered'):
+                continue
+            filtered_packages.append(package)
+
         # Pasar los valores al template
         return render(request, self.template_name, {
             'container': container,
-            'packages': packages,
+            'packages': filtered_packages,  # Usa los paquetes filtrados
             'total_weight': total_weight,
             'total_volumetric_measure': total_volumetric_measure,
         })
@@ -329,6 +375,9 @@ class PackageInfoView(View):
 
 class DeletePackageView(LoginRequiredMixin, View):
     def post(self, request, package_id):
+        # Obtener el ID del contenedor del paquete
+        container_id = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/{package_id}').json().get('container_id')
+
         # Eliminar el paquete
         delete_response = requests.delete(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/{package_id}')
 
@@ -338,16 +387,16 @@ class DeletePackageView(LoginRequiredMixin, View):
 
             if package_response.status_code == 404:
                 # En caso de que el paquete no se encuentre, redirigir a la lista de contenedores
-                return HttpResponseRedirect(reverse_lazy('container_list'))
+                return HttpResponseRedirect(reverse_lazy('container_detail', kwargs={'pk': container_id}))
 
             package = package_response.json()
             container_id = package.get('container_id')
             if container_id:
                 # Redirigir a la vista de la lista de contenedores
-                return HttpResponseRedirect(reverse_lazy('container_list'))
+                return HttpResponseRedirect(reverse_lazy('container_detail', kwargs={'pk': container_id}))
 
         # Redirigir a la lista de contenedores en caso de error
-        return HttpResponseRedirect(reverse_lazy('container_list'))
+        return HttpResponseRedirect(reverse_lazy('container_detail', kwargs={'pk': container_id}))
 
 class DeleteContainerView(LoginRequiredMixin, View):
     def post(self, request, pk):
