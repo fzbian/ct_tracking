@@ -103,15 +103,7 @@ class ArchiveContainerView(LoginRequiredMixin, View):
             return render(request, 'containers/container_list.html', {
                 'error': 'Error archiving container. Please try again.',
             })
-
-import os
-import requests
-from django.shortcuts import render
-from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from datetime import datetime
-
-
+        
 class ContainerDetailView(LoginRequiredMixin, View):
     template_name = 'containers/container_detail.html'
 
