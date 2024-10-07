@@ -464,7 +464,7 @@ def download_package_info(package_id: int, db: Session = Depends(get_db)):
 		<div class="bee-row bee-row-1">
 			<div class="bee-row-content">
 				<div class="bee-col bee-col-1 bee-col-w12">
-					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="http://imgfz.com/i/gCbQAPJ.png" style="max-width:216px;" /></div>
+					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://tracking.chinatownlogistic.com/static/logo_labeled.png" style="max-width:216px;" /></div>
 				</div>
 			</div>
 		</div>
