@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from django.conf.global_settings import STATIC_ROOT
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-zliqz3b=nr$q6p3m5vl-4qo=o2#+h6hz6r%#(1h$3*8nw7dbad'
@@ -10,13 +8,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-# URL para acceder a los archivos estáticos
+# Static files
 STATIC_URL = '/static/'
-
-# Directorio en el que se recopilan los archivos estáticos para producción
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# Directorio donde almacenas archivos estáticos durante el desarrollo
 STATICFILES_DIRS = [BASE_DIR / "app/templates/static"]
 
 # Locale paths
