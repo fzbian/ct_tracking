@@ -4,13 +4,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-zliqz3b=nr$q6p3m5vl-4qo=o2#+h6hz6r%#(1h$3*8nw7dbad'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "app/templates/static"]
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # Ajusta la ruta según tu preferencia
+STATIC_ROOT = BASE_DIR / 'ui/staticfiles'  # Ajusta la ruta según tu preferencia
 
 # Locale paths
 LOCALE_PATHS = [
