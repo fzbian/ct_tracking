@@ -8,9 +8,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-# Static files
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "app/templates/static"]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Ajusta la ruta según tu preferencia
 
 # Locale paths
 LOCALE_PATHS = [
