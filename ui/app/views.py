@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import requests
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
@@ -103,7 +105,7 @@ class ArchiveContainerView(LoginRequiredMixin, View):
             return render(request, 'containers/container_list.html', {
                 'error': 'Error archiving container. Please try again.',
             })
-        
+
 class ContainerDetailView(LoginRequiredMixin, View):
     template_name = 'containers/container_detail.html'
 

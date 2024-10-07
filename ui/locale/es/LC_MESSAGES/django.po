@@ -45,8 +45,8 @@ msgstr "Agregar paquete"
 msgid "Tracking ID"
 msgstr "ID de seguimiento"
 
-msgid "Pseudoname"
-msgstr "Pseudoname"
+msgid "Mark shopping"
+msgstr "Marca de envio"
 
 msgid "Weight"
 msgstr "Peso"
@@ -277,4 +277,9 @@ msgstr "Filtrar"
 msgid "Clear Filters"
 msgstr "Limpiar filtros"
 
+msgid "Receipt"
+msgstr "Recibo"
+
+msgid "Labeled"
+msgstr "Rotulado"
 

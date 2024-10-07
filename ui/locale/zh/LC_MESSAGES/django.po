@@ -45,8 +45,8 @@ msgstr "添加包裹"
 msgid "Tracking ID"
 msgstr "追踪编号"
 
-msgid "Pseudoname"
-msgstr "假名"
+msgid "Mark shopping"
+msgstr "唛头"
 
 msgid "Weight"
 msgstr "重量"
@@ -281,3 +281,9 @@ msgstr "过滤"
 
 msgid "Clear Filters"
 msgstr "清除过滤器"
+
+msgid "Receipt"
+msgstr "收据"
+
+msgid "Labeled"
+msgstr "已标记"

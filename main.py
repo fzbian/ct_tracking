@@ -18,7 +18,6 @@ app.include_router(status.router, prefix="/status", tags=["statuses"])
 
 app.mount("/static", StaticFiles(directory="ui/app/templates/static"), name="static")
 
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}

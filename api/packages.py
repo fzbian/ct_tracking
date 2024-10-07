@@ -10,6 +10,7 @@ from database import SessionLocal
 from io import *
 import weasyprint
 
+
 router = APIRouter()
 
 def get_db():
@@ -44,7 +45,7 @@ def download_receipt(package_id: int, db: Session = Depends(get_db)):
     if not db_package:
         raise HTTPException(status_code=404, detail="Package not found")
 
-    logo_path = "http://imgfz.com/i/PuLaXJD.png"
+    logo_path = "https://tracking.chinatownlogistic.com/static/logo.png"
 
     created_at = db_package.created_at.strftime("%d-%m-%Y")
 
@@ -231,7 +232,7 @@ def download_receipt(package_id: int, db: Session = Depends(get_db)):
 		<div class="bee-row bee-row-1">
 			<div class="bee-row-content">
 				<div class="bee-col bee-col-1 bee-col-w3">
-					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://05f1f637e3.imgdist.com/pub/bfra/5vusj7sf/aki/mew/n9b/PuLaXJD.png" style="max-width:108px;" /></div>
+					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://tracking.chinatownlogistic.com/static/logo.png" style="max-width:108px;" /></div>
 				</div>
 				<div class="bee-col bee-col-2 bee-col-w9">
 					<div class="bee-block bee-block-1 bee-heading">
@@ -303,7 +304,7 @@ def download_package_info(package_id: int, db: Session = Depends(get_db)):
     if not db_package:
         raise HTTPException(status_code=200, detail="Package not found")
 
-    logo_path = "http://imgfz.com/i/PuLaXJD.png"
+    logo_path = "https://tracking.chinatownlogistic.com/static/logo_labeled.png"
     created_at = db_package.created_at.strftime("%d-%m-%Y")
 
     html_content = f"""
@@ -463,7 +464,7 @@ def download_package_info(package_id: int, db: Session = Depends(get_db)):
 		<div class="bee-row bee-row-1">
 			<div class="bee-row-content">
 				<div class="bee-col bee-col-1 bee-col-w12">
-					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://05f1f637e3.imgdist.com/pub/bfra/5vusj7sf/aki/mew/n9b/PuLaXJD.png" style="max-width:216px;" /></div>
+					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://tracking.chinatownlogistic.com/static/logo_labeled.png" style="max-width:216px;" /></div>
 				</div>
 			</div>
 		</div>
@@ -480,13 +481,13 @@ def download_package_info(package_id: int, db: Session = Depends(get_db)):
 			<div class="bee-row-content">
 				<div class="bee-col bee-col-1 bee-col-w12">
 					<div class="bee-block bee-block-1 bee-heading">
-						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">CT-{db_package.pseudoname}</span> </h1>
+						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">{db_package.pseudoname}</span> </h1>
 					</div>
 					<div class="bee-block bee-block-2 bee-heading">
 						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">{created_at}</span> </h1>
 					</div>
 					<div class="bee-block bee-block-3 bee-heading">
-						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">#{db_package.pieces}</span> </h1>
+						<h1 style="color:#000000;direction:ltr;font-family:Arial, Helvetica, sans-serif;font-size:56px;font-weight:700;letter-spacing:1px;line-height:150%;text-align:center;margin-top:0;margin-bottom:0;"><span class="tinyMce-placeholder">PCS {db_package.pieces}</span> </h1>
 					</div>
 				</div>
 			</div>
