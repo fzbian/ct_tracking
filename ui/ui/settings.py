@@ -8,6 +8,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['https://tracking.chinatownlogistic.com']
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "app/templates/static"]
 STATIC_ROOT = BASE_DIR / 'ui/staticfiles'  # Ajusta la ruta según tu preferencia
