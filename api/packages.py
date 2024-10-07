@@ -232,7 +232,7 @@ def download_receipt(package_id: int, db: Session = Depends(get_db)):
 		<div class="bee-row bee-row-1">
 			<div class="bee-row-content">
 				<div class="bee-col bee-col-1 bee-col-w3">
-					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="https://tracking.chinatownlogistic.com/static/logo.png" style="max-width:108px;" /></div>
+					<div class="bee-block bee-block-1 bee-image"><img alt="" class="bee-center bee-fixedwidth" src="http://imgfz.com/i/4QA6BNT.png" style="max-width:108px;" /></div>
 				</div>
 				<div class="bee-col bee-col-2 bee-col-w9">
 					<div class="bee-block bee-block-1 bee-heading">
