@@ -6,10 +6,8 @@ from database import engine, Base
 
 app = FastAPI()
 
-# Create the tables in the database
 Base.metadata.create_all(bind=engine)
 
-# Include the routers
 app.include_router(containers.router, prefix="/containers", tags=["containers"])
 app.include_router(packages.router, prefix="/packages", tags=["packages"])
 app.include_router(health.router, prefix="/health", tags=["health"])

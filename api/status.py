@@ -2,15 +2,9 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from models import Status, StatusCreate, StatusResponse, Package
 from database import SessionLocal
-from twilio.rest import Client
 import os
-# env
 from dotenv import load_dotenv
 load_dotenv()
-
-"""account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-client = Client(account_sid, auth_token)"""
 
 router = APIRouter()
 
