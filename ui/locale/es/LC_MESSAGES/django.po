@@ -52,7 +52,7 @@ msgid "Weight"
 msgstr "Peso"
 
 msgid "CBM"
-msgstr "Volumen"
+msgstr "Medida Volumetrica"
 
 msgid "kg"
 msgstr "kg"

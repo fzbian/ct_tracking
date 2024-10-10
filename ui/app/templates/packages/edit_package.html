@@ -40,7 +40,7 @@
 
             <div class="mb-3">
                 <label for="volumetric_measure" class="form-label">{% trans "CBM" %}:</label>
-                <input type="number" id="volumetric_measure" name="volumetric_measure" class="form-control" min="0"
+                <input type="text" id="floatInput" name="volumetric_measure" class="form-control" oninput="formatInput(this)"
                     value="{{ data.volumetric_measure|default:package.volumetric_measure|stringformat:'0.1f' }}" required>
             </div>
 
@@ -78,6 +78,29 @@
         </form>
     </div>
 
+    <script>
+        function formatInput(input) {
+            let value = input.value;
+            // Reemplaza cualquier punto por una coma
+            value = value.replace(/\./g, ',');
+            // Elimina caracteres no numéricos excepto la coma
+            value = value.replace(/[^0-9,]/g, '');
+            // Limita a una sola coma
+            let parts = value.split(',');
+            if (parts.length > 2) {
+                value = parts[0] + ',' + parts.slice(1).join('');
+            }
+            // Actualiza el valor del input
+            input.value = value;
+        }
+    
+        // Convierte el valor a un número flotante con punto como separador decimal antes de enviar el formulario
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let inputValue = document.getElementById('floatInput').value;
+            let formattedValue = inputValue.replace(',', '.');
+            document.getElementById('floatInput').value = formattedValue;
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
