@@ -262,7 +262,7 @@ class CreatePackageView(LoginRequiredMixin, View):
             'container_id': container_id,
             'containers': requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/').json()  # Re-pasar la lista de contenedores en caso de error
         })
-
+    
 class EditPackageView(LoginRequiredMixin, View):
     template_name = 'packages/edit_package.html'
 
@@ -272,6 +272,10 @@ class EditPackageView(LoginRequiredMixin, View):
 
         response_containers = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/containers/')
         containers = response_containers.json()
+        
+        # Convertir la fecha de creación a un objeto datetime
+        if package.get('created_at'):
+            package['created_at'] = datetime.fromisoformat(package['created_at'])
 
         return render(request, self.template_name, {
             'package': package,
