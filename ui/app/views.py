@@ -371,10 +371,16 @@ class PackageSearchView(View):
 
 class PackageInfoView(View):
     template_name = 'packages/package_info.html'
+    error_template_name = 'packages/package_not_found.html'  # Nombre de la plantilla de error
 
     def get(self, request, tracking_id):
         # Obtener la información del paquete
         response = requests.get(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/getInfoByTrackingId/{tracking_id}')
+
+        # Verificar si el paquete no se encuentra
+        if response.status_code == 404:
+            return render(request, self.error_template_name)  # Redirigir a la página de "paquete no encontrado"
+
         if response.status_code != 200:
             return render(request, self.template_name, {'error': 'Error fetching package details'})
 
@@ -389,7 +395,6 @@ class PackageInfoView(View):
             'statuses': statuses,
             'container_id': container_id,  # Pasar el ID del contenedor al contexto
         })
-
 class DeletePackageView(LoginRequiredMixin, View):
     def post(self, request, package_id):
         # Obtener el ID del contenedor del paquete
