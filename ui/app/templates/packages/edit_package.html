@@ -40,9 +40,10 @@
 
             <div class="mb-3">
                 <label for="volumetric_measure" class="form-label">{% trans "CBM" %}:</label>
-                <input type="text" id="floatInput" name="volumetric_measure" class="form-control" oninput="formatInput(this)"
-                    value="{{ data.volumetric_measure|default:package.volumetric_measure|stringformat:'0.1f' }}" required>
-            </div>
+                <input type="text" id="floatInput" name="volumetric_measure" class="form-control"
+                    value="{{ data.volumetric_measure|default:package.volumetric_measure|stringformat:'0.3f' }}" required
+                    oninput="this.value = this.value.replace(',', '.');">
+            </div>            
 
             <div class="mb-3">
                 <label for="contact_number" class="form-label">{% trans "Contact Number" %}:</label>
@@ -65,6 +66,12 @@
             </div>
 
             <div class="mb-3">
+                <label for="created_at" class="form-label">{% trans "Created At" %}</label>
+                <input type="datetime-local" id="created_at" name="created_at" class="form-control" 
+                       value="{{ package.created_at|date:'Y-m-d\TH:i' }}" required>
+            </div>            
+
+            <div class="mb-3">
                 <label for="container_id" class="form-label">{% trans "Container" %}:</label>
                 <select id="container_id" name="container_id" class="form-select" required>
                     <option value="">{% trans "Select container" %}</option>
@@ -77,30 +84,6 @@
             <button type="submit" class="btn btn-danger mb-4">{% trans "Update Package" %}</button>
         </form>
     </div>
-
-    <script>
-        function formatInput(input) {
-            let value = input.value;
-            // Reemplaza cualquier punto por una coma
-            value = value.replace(/\./g, ',');
-            // Elimina caracteres no numéricos excepto la coma
-            value = value.replace(/[^0-9,]/g, '');
-            // Limita a una sola coma
-            let parts = value.split(',');
-            if (parts.length > 2) {
-                value = parts[0] + ',' + parts.slice(1).join('');
-            }
-            // Actualiza el valor del input
-            input.value = value;
-        }
-    
-        // Convierte el valor a un número flotante con punto como separador decimal antes de enviar el formulario
-        document.querySelector('form').addEventListener('submit', function(event) {
-            let inputValue = document.getElementById('floatInput').value;
-            let formattedValue = inputValue.replace(',', '.');
-            document.getElementById('floatInput').value = formattedValue;
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

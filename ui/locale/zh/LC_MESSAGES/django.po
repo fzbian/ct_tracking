@@ -287,3 +287,6 @@ msgstr "收据"
 
 msgid "Labeled"
 msgstr "已标记"
+
+msgid "Created At"
+msgstr "创建日期"

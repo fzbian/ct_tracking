@@ -283,3 +283,5 @@ msgstr "Recibo"
 msgid "Labeled"
 msgstr "Rotulado"
 
+msgid "Created At"
+msgstr "Fecha de creacion"

@@ -560,7 +560,8 @@ def create_package(package: PackageCreate, db: Session = Depends(get_db)):
         container_id=package.container_id,
         tracking_id=tracking_id,  # Nuevo tracking ID
         package_type=package.package_type,  # Nuevo atributo package_type
-        delivered=False  # Nuevo atributo delivered
+        delivered=False,
+        created_at = package.created_at
     )
     db.add(db_package)
     db.commit()
@@ -627,6 +628,8 @@ def update_package(package_id: int, package: PackageUpdate, db: Session = Depend
         db_package.delivered = package.delivered
     if package.package_type is not None:
         db_package.package_type = package.package_type
+    if package.created_at is not None:
+        db_package.created_at = package.created_at
 
     # Commit de los cambios en la base de datos
     db.commit()

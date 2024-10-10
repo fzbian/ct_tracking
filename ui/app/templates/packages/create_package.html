@@ -34,17 +34,20 @@
 
             <div class="mb-3">
                 <label for="weight" class="form-label">{% trans "Weight" %}</label>
-                <input type="number" id="volumetric_measure" name="volumetric_measure" class="form-control" min="0" required>            </div>
+                <input type="number" id="weight" name="weight" class="form-control" step="0.01" min="0" required>
+            </div>
 
             <div class="mb-3">
-                <label for="volumetric_measure" class="form-label">{% trans "CBM" %}</label>
-                <input type="number" id="volumetric_measure" name="volumetric_measure" class="form-control" step="0.01" min="0" required>
+                <label for="volumetric_measure" class="form-label">{% trans "CBM" %}:</label>
+                <input type="text" id="floatInput" name="volumetric_measure" class="form-control" required
+                    oninput="this.value = this.value.replace(',', '.');">
             </div>
 
             <div class="mb-3">
                 <label for="contact_number" class="form-label">{% trans "Contact Number" %}</label>
                 <input type="text" id="contact_number" name="contact_number" class="form-control" maxlength="10" pattern="\d{10}" required>
             </div>
+
             <div class="mb-3">
                 <label for="pieces" class="form-label">{% trans "Pieces" %}:</label>
                 <input type="number" id="pieces" name="pieces" class="form-control" step="1" min="0" required>
@@ -57,6 +60,11 @@
                     <option value="Yute">{% trans "Yute" %}</option>
                     <option value="Caja">{% trans "Box" %}</option>
                 </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="created_at" class="form-label">{% trans "Created At" %}</label>
+                <input type="datetime-local" id="created_at" name="created_at" class="form-control" required>
             </div>
 
             <div class="mb-3">
@@ -74,6 +82,7 @@
             <!-- Botón con espaciado inferior -->
             <button type="submit" class="btn btn-danger mb-4">{% trans "Create Package" %}</button>
         </form>
+
     </div>
 
     <!-- Bootstrap JS (Opcional) -->

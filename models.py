@@ -114,6 +114,7 @@ class PackageCreate(BaseModel):
     pieces: int  # Atributo existente
     container_id: Optional[int] = None
     package_type: Optional[str] = None  # Atributo existente
+    created_at: datetime
 
 class PackageResponse(BaseModel):
     id: int
@@ -150,6 +151,7 @@ class PackageUpdate(BaseModel):
     pieces: Optional[int] = None  # Atributo existente
     delivered: Optional[bool] = None
     package_type: Optional[str] = None  # Atributo existente para actualizar
+    created_at: Optional[datetime] = None  # Corrige la definición aquí
 
     class Config:
         orm_mode = True

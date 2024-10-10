@@ -238,6 +238,7 @@ class CreatePackageView(LoginRequiredMixin, View):
         contact_number = request.POST.get('contact_number')
         container_id = request.POST.get('container_id')
         package_type = request.POST.get('package_type')
+        created_at = request.POST.get('created_at')
 
         data = {
             'pseudoname': pseudoname,
@@ -246,7 +247,8 @@ class CreatePackageView(LoginRequiredMixin, View):
             'pieces': pieces,
             'contact_number': contact_number,
             'package_type': package_type,
-            'container_id': container_id
+            'container_id': container_id,
+            'created_at': created_at
         }
 
         response = requests.post(f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/', json=data)
@@ -254,6 +256,7 @@ class CreatePackageView(LoginRequiredMixin, View):
         if response.status_code == 200:
             return redirect(f'/containers/{container_id}/')
 
+        print(response.json())
         return render(request, self.template_name, {
             'error': 'Error creating package',
             'container_id': container_id,
@@ -283,6 +286,7 @@ class EditPackageView(LoginRequiredMixin, View):
         contact_number = request.POST.get('contact_number')
         container_id = request.POST.get('container_id')
         package_type = request.POST.get('package_type')
+        created_at = request.POST.get('created_at')
 
         data = {
             'pseudoname': pseudoname,
@@ -291,7 +295,8 @@ class EditPackageView(LoginRequiredMixin, View):
             'pieces': pieces,
             'contact_number': contact_number,
             'package_type': package_type,
-            'container_id': container_id
+            'container_id': container_id,
+            'created_at': created_at
         }
 
         response = requests.put(
@@ -304,6 +309,7 @@ class EditPackageView(LoginRequiredMixin, View):
         package = requests.get(
             f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/packages/{package_id}').json()
 
+        print(response.json())
         # Devolver el formulario con los valores introducidos y el paquete original
         return render(request, self.template_name, {
             'error': 'Error updating package',
