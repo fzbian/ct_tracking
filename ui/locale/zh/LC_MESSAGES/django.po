@@ -290,3 +290,12 @@ msgstr "已标记"
 
 msgid "Created At"
 msgstr "创建日期"
+
+msgid "Edit status date"
+msgstr "编辑状态日期"
+
+msgid "Select a new date and time."
+msgstr "选择新的日期和时间"
+
+msgid "Update Date"
+msgstr "更新日期"

@@ -55,7 +55,9 @@ class Status(Base):
 
     class Config:
         orm_mode = True
+        from_attributes = True
 
+# Modelos Pydantic
 class ContainerCreate(BaseModel):
     identifier_name: str
     shipment_type: str
@@ -95,12 +97,11 @@ class PackageWithContainerResponse(BaseModel):
     contact_number: int
     pieces: int  # Atributo existente
     container_id: Optional[int] = None
-    package_type: Optional[str]  # Atributo existente
+    package_type: Optional[str] = None  # Atributo existente
     created_at: datetime  # Nuevo atributo en la respuesta
     container: Optional[ContainerResponse] = None
     statuses: List[StatusResponse] = []
     delivered: bool
-    created_at: datetime  # Nuevo atributo en la respuesta
 
     class Config:
         orm_mode = True
@@ -136,9 +137,20 @@ class PackageResponse(BaseModel):
 class StatusCreate(BaseModel):
     package_id: int
     status: str
+    updated_at: Optional[datetime] = datetime.now()  # Si no se pasa valor, se asigna la hora actual
+
+    class Config:
+        orm_mode = True
+
 
 class StatusUpdate(BaseModel):
     status: str
+
+    class Config:
+        orm_mode = True
+
+class StatusUpdateDate(BaseModel):
+    updated_at: datetime
 
     class Config:
         orm_mode = True

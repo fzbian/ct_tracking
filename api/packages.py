@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter
+from api import utils
 from models import Package, PackageCreate, PackageResponse, Container, PackageUpdate, StatusResponse, Status, \
     PackageWithContainerResponse, ContainerResponse
 import random
@@ -566,6 +567,7 @@ def create_package(package: PackageCreate, db: Session = Depends(get_db)):
     db.add(db_package)
     db.commit()
     db.refresh(db_package)
+    utils.send_message(0, tracking_id, package.contact_number, "")
 
     status = Status(package_id=db_package.id, status="Recibimos tu envio")
     db.add(status)

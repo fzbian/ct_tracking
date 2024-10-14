@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.contrib.auth.forms import AuthenticationForm
+from django.utils.dateparse import parse_datetime
 from django.urls import reverse_lazy
 from django.views import View
 from django.shortcuts import redirect
@@ -32,6 +33,59 @@ def logout_view(request):
     logout(request)
     return redirect('login')  # Redirige al usuario a la página de login
 
+class EditStatusDateView(LoginRequiredMixin, View):
+    template_name = 'packages/edit_status_date.html'
+
+    def get(self, request, status_id):
+        # Obtener el package_id asociado al status_id desde la API
+        api_url = f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/status/{status_id}'
+        response = requests.get(api_url)
+
+        if response.status_code == 200:
+            status_data = response.json()
+            package_id = status_data['package_id']
+            return render(request, self.template_name, {'status_id': status_id, 'package_id': package_id})
+        else:
+            return render(request, self.template_name, {'status_id': status_id, 'error': 'Failed to fetch status data.'})
+
+    def post(self, request, status_id):
+        updated_at = request.POST.get('updated_at')
+
+        # Validar la fecha y convertirla a formato ISO
+        if updated_at:
+            try:
+                updated_at = parse_datetime(updated_at).isoformat()
+            except ValueError:
+                return render(request, self.template_name, {'status_id': status_id, 'error': 'Invalid date format.'})
+        else:
+            return render(request, self.template_name, {'status_id': status_id, 'error': 'Please provide a date.'})
+
+        # Preparar los datos para actualizar la fecha del status
+        updated_data = {
+            'updated_at': updated_at,
+        }
+
+        # Hacer la solicitud PUT a la API
+        api_url = f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/status/{status_id}/update-date'
+        response = requests.put(api_url, json=updated_data)
+
+        if response.status_code == 200:
+            # Obtener el package_id asociado al status_id desde la API (de nuevo)
+            api_url = f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/status/{status_id}'
+            response = requests.get(api_url)
+
+            if response.status_code == 200:
+                status_data = response.json()
+                package_id = status_data['package_id']
+                # Redireccionar a la vista de detalles del paquete
+                return redirect('view_statuses', package_id=package_id)
+            else:
+                # Mostrar un mensaje de error
+                return render(request, self.template_name, {'status_id': status_id, 'error': 'Failed to fetch status data.'})
+        else:
+            # Mostrar un mensaje de error
+            return render(request, self.template_name, {'status_id': status_id, 'error': 'Failed to update date.'})
+
 class AddStatusView(LoginRequiredMixin, View):
     template_name = 'packages/add_status.html'
 
@@ -41,6 +95,13 @@ class AddStatusView(LoginRequiredMixin, View):
     def post(self, request, package_id):
         status = request.POST.get('status')
         delivered = request.POST.get('delivered') == 'on'  # Verifica si el checkbox está marcado
+        updated_at = request.POST.get('updated_at')
+
+        # Si se proporciona una fecha, parsearla; si no, dejarla en None
+        if updated_at:
+            updated_at = parse_datetime(updated_at)
+        else:
+            updated_at = None
 
         # Lógica para marcar como entregado si el checkbox está activado
         if delivered:
@@ -52,10 +113,17 @@ class AddStatusView(LoginRequiredMixin, View):
             elif response.status_code != 200:
                 return render(request, self.template_name, {'package_id': package_id, 'error': 'Failed to mark as delivered.'})
 
+        # Preparar los datos para enviar el nuevo status
+        status_data = {
+            'package_id': package_id,
+            'status': status,
+            'updated_at': updated_at.isoformat() if updated_at else None  # Convertir a string ISO si está definido
+        }
+
         # Agregar el estado normalmente
         response = requests.post(
             f'{os.getenv("PROTOCOL")}://{os.getenv("API_SERVER")}:{os.getenv("API_PORT")}/status/',
-            json={'package_id': package_id, 'status': status}
+            json=status_data
         )
 
         if response.status_code == 200:

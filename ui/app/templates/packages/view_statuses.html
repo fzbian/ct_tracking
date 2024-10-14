@@ -25,6 +25,7 @@
                     <tr>
                         <th>{% trans "Status" %}</th>
                         <th>{% trans "Updated At" %}</th>
+                        <th>{% trans "Actions" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,10 +33,14 @@
                         <tr>
                             <td>{{ status.status }}</td>
                             <td class="date-cell">{{ status.updated_at }}</td>
+                            <td>
+                                    <a href="{% url 'edit_status_date' status.id %}" class="btn btn-warning">{% trans "Edit status date" %}</a>
+                                </a>
+                            </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="2">{% trans "No statuses found." %}</td>
+                            <td colspan="3">{% trans "No statuses found." %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

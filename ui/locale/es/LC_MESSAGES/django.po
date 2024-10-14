@@ -285,3 +285,15 @@ msgstr "Rotulado"
 
 msgid "Created At"
 msgstr "Fecha de creacion"
+
+msgid "Edit status date"
+msgstr "Editar fecha"
+
+msgid "Select a new date and time."
+msgstr "Selecciona la nueva fecha y hora."
+
+msgid "Update Date"
+msgstr "Actualizar fecha"
+
+msgid "Leave empty to use current time."
+msgstr "Dejar en blanco para usar la fecha y hora actual"

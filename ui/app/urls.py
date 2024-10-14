@@ -24,6 +24,7 @@ urlpatterns = [
         path('edit/<int:package_id>/', views.EditPackageView.as_view(), name='edit_package'),
         path('statuses/<int:package_id>/', views.PackageStatusDetailView.as_view(), name='view_statuses'),
         path('statuses/add/<int:package_id>/', views.AddStatusView.as_view(), name='add_status'),
+        path('statuses/<int:status_id>/edit-date/', views.EditStatusDateView.as_view(), name='edit_status_date'),
         path('downloadReceipt/<int:package_id>/', views.DownloadPackageReceiptView.as_view(), name='download_package_receipt'),  # Nueva ruta
         path('downloadLabeled/<int:package_id>/', views.DownloadPackageLabeledView.as_view(), name='download_package_labeled'),  # Nueva ruta
     ])),
