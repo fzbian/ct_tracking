@@ -542,8 +542,14 @@ def deliver_package_by_container(container_id: int, db: Session = Depends(get_db
     packages = db.query(Package).filter(Package.container_id == container_id).all()
     return packages
 
+from fastapi import BackgroundTasks
+
 @router.post("/", response_model=PackageResponse)
-def create_package(package: PackageCreate, db: Session = Depends(get_db)):
+def create_package(
+    package: PackageCreate,
+    background_tasks: BackgroundTasks,  # Añadir este argumento
+    db: Session = Depends(get_db)
+):
     container = db.query(Container).filter(Container.id == package.container_id).first()
     if not container:
         raise HTTPException(status_code=404, detail="Container not found")
@@ -562,13 +568,16 @@ def create_package(package: PackageCreate, db: Session = Depends(get_db)):
         tracking_id=tracking_id,  # Nuevo tracking ID
         package_type=package.package_type,  # Nuevo atributo package_type
         delivered=False,
-        created_at = package.created_at
+        created_at=package.created_at
     )
     db.add(db_package)
     db.commit()
     db.refresh(db_package)
-    utils.send_message(0, tracking_id, package.contact_number, "")
 
+    # Enviar mensaje en segundo plano
+    background_tasks.add_task(utils.send_message, 0, tracking_id, package.contact_number, "")
+
+    # Crear el estado del paquete
     status = Status(package_id=db_package.id, status="RECIBIMOS TU ENVIO")
     db.add(status)
     db.commit()

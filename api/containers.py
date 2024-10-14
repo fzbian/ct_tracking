@@ -1,8 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm import Session
+from api import utils
 from models import Container, ContainerCreate, ContainerResponse, PackageResponse, StatusCreate, Status, StatusUpdate, \
     Package
 from database import SessionLocal
@@ -106,20 +107,22 @@ def get_values_by_container(container_id: int, db: Session = Depends(get_db)):
         "total_volumetric_measure": total_volumetric_measure
     }
 
-
 @router.post("/changeStatusByContainer/{container_id}")
-def change_status_by_container(container_id: int, status_data: StatusUpdate, db: Session = Depends(get_db)):
+def change_status_by_container(
+    container_id: int,
+    status_data: StatusUpdate,
+    background_tasks: BackgroundTasks,  # Mover esto antes del argumento con valor por defecto
+    db: Session = Depends(get_db)
+):
     # Verificar si el contenedor existe
-    container = db.query(Container).filter(
-        Container.id == container_id).first()
+    container = db.query(Container).filter(Container.id == container_id).first()
     if not container:
         raise HTTPException(status_code=404, detail="Container not found")
 
     # Obtener todos los paquetes del contenedor
     packages = container.packages
     if not packages:
-        raise HTTPException(
-            status_code=404, detail="No packages found for this container")
+        raise HTTPException(status_code=404, detail="No packages found for this container")
 
     # Cambiar el estado de cada paquete
     for package in packages:
@@ -129,6 +132,9 @@ def change_status_by_container(container_id: int, status_data: StatusUpdate, db:
         )
         db.add(db_status)
 
+        # Añadir el envío de mensajes a las tareas en segundo plano
+        background_tasks.add_task(utils.send_message, 1, package.tracking_id, package.contact_number, status_data.status)
+
     db.commit()
 
     return {
@@ -136,7 +142,6 @@ def change_status_by_container(container_id: int, status_data: StatusUpdate, db:
         "status": status_data.status,
         "message": f"Status updated for {len(packages)} packages"
     }
-
 
 @router.get("/getContainerStatuses/{container_id}")
 def get_container_statuses(container_id: int, db: Session = Depends(get_db)):

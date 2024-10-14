@@ -26,8 +26,14 @@ def get_status(status_id: int, db: Session = Depends(get_db)):
 
     return db_status
 
+from fastapi import BackgroundTasks
+
 @router.post("/", response_model=StatusResponse)
-def create_status(status: StatusCreate, db: Session = Depends(get_db)):
+def create_status(
+    status: StatusCreate,
+    background_tasks: BackgroundTasks,  # Mover este argumento antes de db
+    db: Session = Depends(get_db)
+):
     package = db.query(Package).filter(Package.id == status.package_id).first()
     if not package:
         raise HTTPException(status_code=404, detail="Package not found")
@@ -35,10 +41,11 @@ def create_status(status: StatusCreate, db: Session = Depends(get_db)):
     db_status = Status(
         package_id=status.package_id,
         status=status.status,
-        updated_at = status.updated_at
+        updated_at=status.updated_at
     )
 
-    utils.send_message(1, package.tracking_id, package.contact_number, status.status)
+    # Añadir el envío de mensajes a las tareas en segundo plano
+    background_tasks.add_task(utils.send_message, 1, package.tracking_id, package.contact_number, status.status)
 
     db.add(db_status)
     db.commit()
