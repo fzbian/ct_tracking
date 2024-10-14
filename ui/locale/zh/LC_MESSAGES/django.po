@@ -299,3 +299,6 @@ msgstr "选择新的日期和时间"
 
 msgid "Update Date"
 msgstr "更新日期"
+
+msgid "Leave empty to use current time."
+msgstr "留空以使用当前时间"
