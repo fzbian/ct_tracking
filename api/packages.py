@@ -569,7 +569,7 @@ def create_package(package: PackageCreate, db: Session = Depends(get_db)):
     db.refresh(db_package)
     utils.send_message(0, tracking_id, package.contact_number, "")
 
-    status = Status(package_id=db_package.id, status="Recibimos tu envio")
+    status = Status(package_id=db_package.id, status="RECIBIMOS TU ENVIO")
     db.add(status)
     db.commit()
 
